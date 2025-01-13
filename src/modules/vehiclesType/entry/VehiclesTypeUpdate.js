@@ -36,37 +36,79 @@ export const VehiclesTypeUpdate = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const submitVehiclesType = async () => {
-    setLoading(true);
-    const updatedPayload = { ...payload, facilities: localFacilities };
-    const formData = formBuilder(updatedPayload, vehiclesTypePayload.update);
-    const response = await vehiclesTypeService.update(
-      dispatch,
-      params.id,
-      formData
-    );
-    if (response.status === 200) {
-      navigate(paths.vehiclesType);
-    }
-    setLoading(false);
-  };
-
   const loadingData = useCallback(async () => {
     setLoading(true);
     await vehiclesTypeService.show(dispatch, params.id);
+
     setLoading(false);
   }, [dispatch, params.id]);
+  console.log(vehiclesTypePayload.update);
 
   useEffect(() => {
     loadingData();
   }, [loadingData]);
 
+  console.log("payload >>", payload);
+
+  const submitVehiclesType = async () => {
+    setLoading(true);
+    if (payload.facilities && Array.isArray(payload.facilities)) {
+      payload.facilities = JSON.stringify(payload.facilities);
+    }
+    try {
+      const formData = formBuilder(payload, vehiclesTypePayload.update);
+      const response = await vehiclesTypeService.update(
+        dispatch,
+        params.id,
+        formData
+      );
+      if (response.status === 200) {
+        navigate(paths.vehiclesType);
+      }
+    } catch (error) {
+      console.error("Error occurred while submitting:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // useEffect(() => {
+  //   if (vehiclesType) {
+  //     const updatePayload = { ...vehiclesType };
+  //     setPayload(updatePayload);
+
+  //     // Update localFacilities with the facilities from the payload
+  //     console.log("is array = ", Array.isArray(vehiclesType.facilities));
+  //     console.log("vehiclesType.facilities = ", vehiclesType.facilities);
+  //   }
+  // }, [vehiclesType]);
   useEffect(() => {
     if (vehiclesType) {
       const updatePayload = { ...vehiclesType };
+
+      // Check if facilities is a string and parse it
+      if (typeof vehiclesType.facilities === "string") {
+        try {
+          updatePayload.facilities = JSON.parse(vehiclesType.facilities);
+        } catch (error) {
+          console.error("Failed to parse facilities:", error);
+          updatePayload.facilities = []; // Fallback to an empty array
+        }
+      }
+
       setPayload(updatePayload);
+      setLocalFacilities(updatePayload.facilities || []);
     }
   }, [vehiclesType]);
+
+  useEffect(() => {
+    if (payload?.facilities) {
+      setLocalFacilities(payload.facilities);
+    } else {
+      setLocalFacilities([]); // Reset to an empty array if no facilities
+    }
+    console.log("Set localFacilities >>", localFacilities);
+  }, [payload]);
 
   const addFacility = (value) => {
     const newFacilities = [...localFacilities, value.trim()];
@@ -203,6 +245,7 @@ export const VehiclesTypeUpdate = () => {
                     padding: "4px",
                   }}
                 >
+                  {console.log(localFacilities)}
                   {localFacilities.map((facility, index) => (
                     <Chip
                       key={index}
@@ -213,7 +256,7 @@ export const VehiclesTypeUpdate = () => {
                   ))}
                   <OutlinedInput
                     type="text"
-                    onChange={(e) => {
+                    onKeyDown={(e) => {
                       if (
                         e.key === "Enter" &&
                         e.currentTarget.value.trim() !== ""
