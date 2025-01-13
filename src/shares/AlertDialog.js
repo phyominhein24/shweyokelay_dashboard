@@ -1,28 +1,29 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
-import { useDispatch, useSelector } from 'react-redux';
-import { alertToggle } from './shareSlice';
+import * as React from "react";
+
+import { useDispatch, useSelector } from "react-redux";
+
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Slide from "@mui/material/Slide";
+import { alertToggle } from "./shareSlice";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function AlertDialog({ title, body, onAgree }) {
-  
-  const { showAlert } = useSelector(state => state.share)
+  const { showAlert } = useSelector((state) => state.share);
 
   const dispatch = useDispatch();
 
   const alertToggleClick = () => {
-    dispatch(alertToggle())
-  }
- 
+    dispatch(alertToggle());
+  };
+
   return (
     <div>
       <Dialog
@@ -39,8 +40,10 @@ export default function AlertDialog({ title, body, onAgree }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={alertToggleClick}>Disagree</Button>
-          <Button onClick={onAgree}>Agree</Button>
+          <Button onClick={alertToggleClick}>Cancel</Button>
+          <Button onClick={onAgree} color="error">
+            Delete
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
