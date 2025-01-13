@@ -1,0 +1,55 @@
+export const paymentHistoryPayload = {
+    update: {
+        member: "",
+        route: "",
+        phone: "",
+        nrc: "",
+        seat: "",
+        total: "",
+        note: "",
+        startTime: "",
+        status: "" 
+    },
+    store: {
+        member: "",
+        route: "",
+        phone: "",
+        nrc: "",
+        seat: "",
+        total: "",
+        note: "",
+        startTime: "",
+        status: "" 
+    },
+    columnsName: 'paymentHistoryColumns',
+    columns: [
+        { id: "id", label: "Id", minWidth: 60 },
+        { id: "member", label: "Member", minWidth: 100 },
+        { id: "route", label: "Route", minWidth: 100 },
+        { id: "phone", label: "Phone", minWidth: 80 },
+        { id: "nrc", label: "Nrc", minWidth: 100 },
+        { id: "seat", label: "Seat", minWidth: 100 },
+        { id: "total", label: "Total", minWidth: 100 },
+        { id: "note", label: "Note", minWidth: 100 },
+        { id: "startTime", label: "Start Time", minWidth: 100 },
+        { id: "status", label: "Status", minWidth: 100 },
+
+        { id: "created_by", label: "Created By", minWidth: 100 },
+        { id: "updated_by", label: "Updated By", minWidth: 100 },
+        { id: "created_at", label: "Created At", minWidth: 100 },
+        { id: "updated_at", label: "Updated At", minWidth: 100 },
+
+        { id: "option", label: "Option", minWidth: 100 },
+    ],
+    paginateParams: {
+        page: 1,
+        per_page: 10,
+        columns: "member,route,phone,nrc,seat,total,note,startTime",
+        search: "",
+        order: "id",
+        sort: "ASC",
+        value: "",
+        start_date: "",
+        end_date: "",
+    },
+};
