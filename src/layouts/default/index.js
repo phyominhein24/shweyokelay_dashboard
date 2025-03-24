@@ -97,7 +97,7 @@ export const DefaultLayout = () => {
 
     useEffect(() => {
         if(Object.keys(man).length === 0){
-            getUserData()            
+            // getUserData()            
         }
     
         // const data = getData(keys.USER)
