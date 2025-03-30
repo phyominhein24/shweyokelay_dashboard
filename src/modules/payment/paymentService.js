@@ -2,14 +2,14 @@ import { endpoints } from "../../constants/endpoints";
 import { delRequest, featchGetRequest, getRequest, postRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
 import { updateNotification } from "../../shares/shareSlice";
-import { index, update } from "./paymentHistorySlice";
+import { index, update } from "./paymentSlice";
 import { getData } from "../../helpers/localstorage";
 import { keys } from "../../constants/config";
 import { baseURL } from "../../constants/endpoints";
 
-export const paymentHistoryService = {
+export const paymentService = {
     store: async (payload, dispatch) => {
-        const response = await postRequest(endpoints.paymentHistory, payload);
+        const response = await postRequest(endpoints.payment, payload);
         await httpServiceHandler(dispatch, response);
 
         if (response.status === 200) {
@@ -21,7 +21,7 @@ export const paymentHistoryService = {
         return response;
     },
     index: async (dispatch, params) => {
-        const response = await getRequest(endpoints.paymentHistory, params);
+        const response = await getRequest(endpoints.payment, params);
         await httpServiceHandler(dispatch, response);
 
         if (response.status === 200) {
@@ -38,7 +38,7 @@ export const paymentHistoryService = {
         return response;
     },
     update: async (dispatch, id, payload) => {
-        const response = await postRequest(`${endpoints.paymentHistory}/${id}`, payload);
+        const response = await postRequest(`${endpoints.payment}/${id}`, payload);
         await httpServiceHandler(dispatch, response);
 
         if(response.status === 200) {
@@ -50,8 +50,8 @@ export const paymentHistoryService = {
         }
         return response;
     },
-    show: async (dispatch, id, name) => {
-        const response = await getRequest(`${endpoints.paymentHistory}/${name}/${id}`);
+    show: async (dispatch, id) => {
+        const response = await getRequest(`${endpoints.payment}/${id}`);
         await httpServiceHandler(dispatch, response);
 
         if(response.status === 200) {
@@ -61,7 +61,7 @@ export const paymentHistoryService = {
         return response;
     },
     destory: async (dispatch, id) => {
-        const response = await delRequest(`${endpoints.paymentHistory}/${id}`);
+        const response = await delRequest(`${endpoints.payment}/${id}`);
         await httpServiceHandler(dispatch, response);
 
         // if (response.status === 200) {
@@ -73,7 +73,7 @@ export const paymentHistoryService = {
         return response;
     },
     exportexcel: async (dispatch, params) => {
-        const response = await featchGetRequest(`${baseURL}/${endpoints.paymentHistory}/exportexcel`, params)
+        const response = await featchGetRequest(`${baseURL}/${endpoints.payment}/exportexcel`, params)
 
         if (response.status === 200) {
             dispatch(updateNotification({
@@ -84,7 +84,7 @@ export const paymentHistoryService = {
         return response;
     },
     exportexcelparams: async (dispatch, params) => {
-        const response = await featchGetRequest(`${baseURL}/${endpoints.paymentHistory}/exportexcelparams`, params)
+        const response = await featchGetRequest(`${baseURL}/${endpoints.payment}/exportexcelparams`, params)
 
         if (response.status === 200) {
             dispatch(updateNotification({
@@ -95,7 +95,7 @@ export const paymentHistoryService = {
         return response
     },
     exportpdf: async (dispatch, params) => {
-        const response = await featchGetRequest(`${baseURL}/${endpoints.paymentHistory}/exportpdf`, params, "pdf")
+        const response = await featchGetRequest(`${baseURL}/${endpoints.payment}/exportpdf`, params, "pdf")
 
         if (response.status === 200) {
             dispatch(updateNotification({
@@ -106,7 +106,7 @@ export const paymentHistoryService = {
         return response
     },
     exportpdfparams: async (dispatch, params) => {
-        const response = await featchGetRequest(`${baseURL}/${endpoints.paymentHistory}/exportpdfparams`, params, "pdf")
+        const response = await featchGetRequest(`${baseURL}/${endpoints.payment}/exportpdfparams`, params, "pdf")
 
         if (response.status === 200) {
             dispatch(updateNotification({
@@ -117,7 +117,7 @@ export const paymentHistoryService = {
         return response
     },
     import: async (payload, dispatch) => {
-        const response = await postRequest(`${endpoints.paymentHistory}/import`, payload);
+        const response = await postRequest(`${endpoints.payment}/import`, payload);
         await httpServiceHandler(dispatch, response);
 
         return response

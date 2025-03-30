@@ -14,6 +14,8 @@ import { roleRoutes } from "./modules/role/roleRoutes";
 import { agentRoutes } from "./modules/agent/agentRoutes";
 import { adminRoutes } from "./modules/admin/adminRoutes";
 import { sroutesSroutes } from "./modules/sroutes/sroutesRoutes";
+import { paymentRoutes } from "./modules/payment/paymentRoutes";
+import { dailyRouteRoutes } from "./modules/dailyRoute/dailyRouteRoutes";
 
 
 export const routers = createBrowserRouter([
@@ -31,7 +33,9 @@ export const routers = createBrowserRouter([
             ...agentRoutes,
             ...userRoutes,
             ...roleRoutes,
-            ...adminRoutes
+            ...adminRoutes,
+            ...paymentRoutes,
+            ...dailyRouteRoutes
         ],
     },
     {

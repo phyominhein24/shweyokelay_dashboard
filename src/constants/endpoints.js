@@ -18,5 +18,7 @@ export const endpoints = {
   permission: "permission",
   changepassword: "change-password",
   profile: "profile",
+  payment: "payment",
+  dailyRoute: "dailyRoute",
   image: `${imageURL}`,
 };

@@ -7,11 +7,11 @@ import {
     TableCell, TableContainer,
     TablePagination, TableRow,
     Paper, Box, TableHead, 
-    TableSortLabel, IconButton
+    TableSortLabel, Avatar
 } from "@mui/material";
-import { setPaginate } from "../paymentHistorySlice";
-import { paymentHistoryService } from "../paymentHistoryService";
-import { paymentHistoryPayload } from "../paymentHistoryPayload";
+import { setPaginate } from "../dailyRouteSlice";
+import { dailyRouteService } from "../dailyRouteService";
+import { dailyRoutePayload } from "../dailyRoutePayload";
 import { paths } from "../../../constants/paths";
 import { NavigateId } from "../../../shares/NavigateId";
 import { TableSearch } from "../../../shares/TableSearch";
@@ -19,18 +19,16 @@ import { FilterByStatus } from "../../../shares/FilterByStatus";
 import { FilterByDate } from "../../../shares/FilterByDate";
 import { TableCustomizeSetting } from "../../../shares/TableCustomizeSetting";
 import { alertToggle, setDateFilter } from "../../../shares/shareSlice";
-import TimetoAmPm from "../../../shares/TimetoAmPm";
 import ExportImportButton from "../../../shares/ExportImportButton";
 import SkeletonTable from "../../../shares/SkeletonTable";
 import { getData, setData } from "../../../helpers/localstorage";
 import ReloadData from "../../../shares/ReloadData";
 import AlertDialog from "../../../shares/AlertDialog";
 import EmptyData from "../../../shares/EmptyData";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
+import { endpoints } from "../../../constants/endpoints";
 
-export const PaymentHistoryList = () => {
-    const { paymentHistorys, paginateParams } = useSelector((state) => state.paymentHistory);
+export const DailyRouteList = () => {
+    const { dailyRoutes, paginateParams } = useSelector((state) => state.dailyRoute);
     const { startFilterDate, endFilterDate, selectedId } = useSelector((state) => state.share );
     const dispatch = useDispatch();
 
@@ -39,9 +37,9 @@ export const PaymentHistoryList = () => {
     const [columnIds, setColumnIds] = useState("");
     const [sort, setSort] = useState(true);
 
-    const [columns, setColumns] = useState(getData(paymentHistoryPayload.columnsName) == null ? paymentHistoryPayload.columns : getData(paymentHistoryPayload.columnsName));
+    const [columns, setColumns] = useState(getData(dailyRoutePayload.columnsName) == null ? dailyRoutePayload.columns : getData(dailyRoutePayload.columnsName));
 
-    const paymentHistoryStatus = useRef(['ALL']);
+    const dailyRouteStatus = useRef(['ALL','ACTIVE','INACTIVE']);
 
     const onPageChange = (event, newPage) => {
         dispatch(
@@ -121,12 +119,12 @@ export const PaymentHistoryList = () => {
             loadingData();
         }
         dispatch(setDateFilter(""));
-        dispatch(setPaginate(paymentHistoryPayload.paginateParams));
+        dispatch(setPaginate(dailyRoutePayload.paginateParams));
     }
 
     const deleteData = async () => {
         setIsLoading(true)
-        const result = await paymentHistoryService.destory(dispatch, selectedId)
+        const result = await dailyRouteService.destory(dispatch, selectedId)
         if (result.status == 200) {
             dispatch(alertToggle())
             loadingData();
@@ -138,26 +136,26 @@ export const PaymentHistoryList = () => {
     }
 
     const exportExcelData = async () => {
-        await paymentHistoryService.exportexcel(dispatch)
+        await dailyRouteService.exportexcel(dispatch)
     }
 
     const exportExcelParamsData = async () => {
-        await paymentHistoryService.exportexcelparams(dispatch, paginateParams)
+        await dailyRouteService.exportexcelparams(dispatch, paginateParams)
     }
 
     const exportPdfData = async () => {
-        await paymentHistoryService.exportpdf(dispatch)
+        await dailyRouteService.exportpdf(dispatch)
     }
 
     const exportPdfParamsData = async () => {
-        await paymentHistoryService.exportpdfparams(dispatch, paginateParams)
+        await dailyRouteService.exportpdfparams(dispatch, paginateParams)
     }
 
     const importData = async (e) => {
         setIsLoading(true);
         const formData = new FormData();
         formData.append('file',e);
-        const create = await paymentHistoryService.import(formData, dispatch);
+        const create = await dailyRouteService.import(formData, dispatch);
         if(create.status == 200){
             loadingData()
         }
@@ -165,35 +163,17 @@ export const PaymentHistoryList = () => {
     }
 
     const loadingData = useCallback(async () => {
-        const result = await paymentHistoryService.index(dispatch, paginateParams);
+        const result = await dailyRouteService.index(dispatch, paginateParams);
         if (result.status === 200) {
             setTotal(
                 result.data.total
             );
         }
         setIsLoading(false)
-        if(getData(paymentHistoryPayload.columnsName) == null){
-            setData(paymentHistoryPayload.columnsName, paymentHistoryPayload.columns)
+        if(getData(dailyRoutePayload.columnsName) == null){
+            setData(dailyRoutePayload.columnsName, dailyRoutePayload.columns)
         }
     }, [dispatch, paginateParams]);
-
-    const confirmTicket = async (id) => {
-        setIsLoading(true);
-        const confirm = await paymentHistoryService.show(dispatch, id, 'confirm');
-        if(confirm.status == 200){
-            loadingData()
-        }
-        setIsLoading(false); 
-    }
-
-    const rejectTicket = async (id) => {
-        setIsLoading(true);
-        const reject = await paymentHistoryService.show(dispatch, id, 'reject');
-        if(reject.status == 200){
-            loadingData()
-        }
-        setIsLoading(false); 
-    }
 
     useEffect(() => {
         setIsLoading(true)
@@ -201,7 +181,7 @@ export const PaymentHistoryList = () => {
     }, [loadingData]);
 
     useEffect(()=>{
-        setData(paymentHistoryPayload.columnsName, columns)
+        setData(dailyRoutePayload.columnsName, columns)
     },[columns])
 
     return (
@@ -219,32 +199,32 @@ export const PaymentHistoryList = () => {
                                     <TableCell colSpan={12}>
                                         <Grid container spacing={2} direction="row" sx={{ paddingTop: 1 }}>
 
-                                            <Grid container spacing={0.5} xs={12} sm={12} md={12} lg={7} xl={7} direction="row" justifyContent="flex-start" alignTransferItems="center">
+                                            <Grid container spacing={0.5} xs={12} sm={12} md={12} lg={7} xl={7} direction="row" justifyContent="flex-start" alignItems="center">
                                                 
-                                                <Grid transferItem xs={1}>
-                                                    <TableCustomizeSetting payload={paymentHistoryPayload.columns} columns={columns} setColumns={(e)=>setColumns(e)} />
+                                                <Grid item xs={1}>
+                                                    <TableCustomizeSetting payload={dailyRoutePayload.columns} columns={columns} setColumns={(e)=>setColumns(e)} />
                                                 </Grid>
 
-                                                {/* <Grid transferItem xs={2}> 
-                                                    <FilterByStatus paginateParams={paginateParams} status={transferItemStatus} onFilter={onFilter} />
-                                                </Grid> */}
+                                                <Grid item xs={2}> 
+                                                    <FilterByStatus paginateParams={paginateParams} status={dailyRouteStatus} onFilter={onFilter} />
+                                                </Grid>
 
-                                                <Grid transferItem xs={8}>
+                                                <Grid item xs={8}>
                                                     <FilterByDate onFilter={onFilterByDate} />
                                                 </Grid>
 
-                                                <Grid transferItem xs={1}>
+                                                <Grid item xs={1}>
                                                     <ReloadData reloadData={reloadData}/>
                                                 </Grid>
                                                 
                                             </Grid>
-                                            <Grid container spacing={0.5} xs={12} sm={12} md={12} lg={5} xl={5} direction="row" justifyContent="flex-end" alignTransferItems="center">
+                                            <Grid container spacing={0.5} xs={12} sm={12} md={12} lg={5} xl={5} direction="row" justifyContent="flex-end" alignItems="center">
 
-                                                {/* <Grid transferItem>
+                                                {/* <Grid item>
                                                     <ExportImportButton exportExcelData={()=>exportExcelData()} exportPdfData={()=>exportPdfData()} importData={(e)=>importData(e)} exportExcelParamsData={(e)=>exportExcelParamsData(e)} exportPdfParamsData={(e)=>exportPdfParamsData(e)}/>
                                                 </Grid> */}
 
-                                                <Grid transferItem>
+                                                <Grid item>
                                                     <TableSearch paginateParams={paginateParams} onSearchChange={onSearchChange} />
                                                 </Grid>
 
@@ -280,7 +260,7 @@ export const PaymentHistoryList = () => {
                             </TableHead>
                             {total !== 0 && (
                                 <TableBody>
-                                    {paymentHistorys.map((row) => {
+                                    {dailyRoutes.map((row) => {
                                         return (
                                             <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                                 {columns.map((column) => {
@@ -289,35 +269,11 @@ export const PaymentHistoryList = () => {
                                                     const switchCase = ({ column, value }) => {
                                                         switch (column.id) {
                                                             
-                                                            case "open_time":
-                                                                return TimetoAmPm(value);
-                                                            case "close_time":
-                                                                return TimetoAmPm(value);
+                                                            case "image":
+                                                                return  <Avatar alt="icon" src={value ? `${endpoints.image}${value}` : null} />
                                                             case "option":
                                                                 return (
-                                                                    <>
-                                                                        <IconButton
-                                                                            sx={{ cursor: 'pointer', marginRight: 1 }}
-                                                                            onClick={() => {
-                                                                                if (window.confirm("Are you sure you want to confirm this ticket?")) {
-                                                                                    confirmTicket(row.id);
-                                                                                }
-                                                                            }}
-                                                                        >
-                                                                            <CheckCircleIcon style={{ color: '#1876D2' }} />
-                                                                        </IconButton>
-
-                                                                        <IconButton
-                                                                            sx={{ cursor: 'pointer' }}
-                                                                            onClick={() => {
-                                                                                if (window.confirm("Are you sure you want to reject this ticket?")) {
-                                                                                    rejectTicket(row.id);
-                                                                                }
-                                                                            }}
-                                                                        >
-                                                                            <CancelIcon style={{ color: 'red' }} />
-                                                                        </IconButton>
-                                                                    </>
+                                                                    <NavigateId url={`${paths.dailyRoute}/${row.id}`} id={row.id} />
                                                                 )
                                                             default:
                                                                 return value;
@@ -336,7 +292,7 @@ export const PaymentHistoryList = () => {
                                     {emptyRows(
                                         paginateParams.page,
                                         paginateParams.rowsPerPage,
-                                        paymentHistorys
+                                        dailyRoutes
                                     ) > 0 && (
                                             <TableRow style={{ height: 53 * emptyRows }}>
                                                 <TableCell colSpan={6} />
