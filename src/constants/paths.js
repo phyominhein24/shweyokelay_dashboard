@@ -28,6 +28,12 @@ export const paths = {
     role: "/role",
     roleCreate: "/role/new",
 
+    payment: "/payment",
+    paymentCreate: "/payment/new",
+
+    dailyRoute: "/dailyRoute",
+    dailyRouteCreate: "/dailyRoute/new",
+
     admin: "/admin",
 
     adminLogout: "/auth/login",

@@ -11,6 +11,8 @@ import routesSlice from "./modules/routes/routesSlice";
 import sroutesSlice from "./modules/sroutes/sroutesSlice";
 import roleSlice from "./modules/role/roleSlice";
 import vehiclesTypeSlice from "./modules/vehiclesType/vehiclesTypeSlice";
+import paymentSlice from "./modules/payment/paymentSlice";
+import dailyRouteSlice from "./modules/dailyRoute/dailyRouteSlice";
 
 
 export const stores = configureStore({
@@ -27,6 +29,8 @@ export const stores = configureStore({
         routes: routesSlice,
         sroutes: sroutesSlice,
         role: roleSlice,
+        payment: paymentSlice,
+        dailyRoute: dailyRouteSlice
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

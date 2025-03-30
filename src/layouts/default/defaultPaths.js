@@ -22,8 +22,22 @@ export const items = [
     },
     {
         key: "2",
-        label: "PaymentHistory",
-        data: "PaymentHistory",
+        label: "Daily Route",
+        data: "Daily Route",
+        icon: <PaymentIcon />,
+        children: [
+            {
+                key: "2-1",
+                label: "List",
+                icon: <FormatListBulletedIcon />,
+                url: paths.dailyRoute,
+            }
+        ],
+    },
+    {
+        key: "2",
+        label: "Payment History",
+        data: "Payment History",
         icon: <PaymentIcon />,
         children: [
             {
@@ -42,8 +56,8 @@ export const items = [
     },
     {
         key: "2",
-        label: "VehiclesType",
-        data: "VehiclesType",
+        label: "Vehicles Type",
+        data: "Vehicles Type",
         icon: <CategoryIcon />,
         children: [
             {
@@ -157,6 +171,26 @@ export const items = [
                 label: "Create",
                 icon: <AddIcon />,
                 url: paths.agentCreate,
+            },
+        ],
+    },
+    {
+        key: "2",
+        label: "Payment",
+        data: "Payment",
+        icon: <CategoryIcon />,
+        children: [
+            {
+                key: "2-1",
+                label: "List",
+                icon: <FormatListBulletedIcon />,
+                url: paths.payment,
+            },
+            {
+                key: "2-2",
+                label: "Create",
+                icon: <AddIcon />,
+                url: paths.paymentCreate,
             },
         ],
     },

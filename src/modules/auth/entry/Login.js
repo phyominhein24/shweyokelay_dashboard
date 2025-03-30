@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardContent, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, Typography } from '@mui/material'
+import { Box, Button, Card, CardContent, FilledInput, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -107,14 +107,15 @@ export const Login = () => {
                         display="flex"
                         justifyContent="end"
                         alignItems="center"
-                        sx={{
-                            marginTop: '10px'
-                        }}
+                        sx={{ marginTop: '10px' }}
                     >
                         <Button
                             variant="contained"
-                            onClick={()=>submitLogin()}
-                        >Login</Button>
+                            onClick={submitLogin}
+                            disabled={loading} // Disable button when loading
+                        >
+                            {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
+                        </Button>
                     </Box>
                 </CardContent>
 

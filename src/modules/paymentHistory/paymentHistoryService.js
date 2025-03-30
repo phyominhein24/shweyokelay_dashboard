@@ -50,8 +50,8 @@ export const paymentHistoryService = {
         }
         return response;
     },
-    show: async (dispatch, id) => {
-        const response = await getRequest(`${endpoints.paymentHistory}/${id}`);
+    show: async (dispatch, id, name) => {
+        const response = await getRequest(`${endpoints.paymentHistory}/${name}/${id}`);
         await httpServiceHandler(dispatch, response);
 
         if(response.status === 200) {

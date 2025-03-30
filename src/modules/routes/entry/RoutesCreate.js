@@ -334,7 +334,7 @@ export const RoutesCreate = () => {
 
             <Grid item xs={12} md={4}>
               <Stack spacing={1}>
-                <InputLabel>Price</InputLabel>
+                <InputLabel>Local Price</InputLabel>
                 <OutlinedInput
                   type="number"
                   onChange={(e) =>
@@ -348,9 +348,75 @@ export const RoutesCreate = () => {
                     )
                   }
                   name="price"
-                  placeholder="Ente Routes Price"
+                  placeholder="Ente Routes Local Price"
                 />
                 <ValidationMessage field={"price"} />
+              </Stack>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <Stack spacing={1}>
+                <InputLabel>Foreigner Price</InputLabel>
+                <OutlinedInput
+                  type="number"
+                  onChange={(e) =>
+                    payloadHandler(
+                      payload,
+                      e.target.value,
+                      "fprice",
+                      (updateValue) => {
+                        setPayload(updateValue);
+                      }
+                    )
+                  }
+                  name="fprice"
+                  placeholder="Ente Routes Foreigner Price"
+                />
+                <ValidationMessage field={"fprice"} />
+              </Stack>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <Stack spacing={1}>
+                <InputLabel>Last Min For Buying</InputLabel>
+                <OutlinedInput
+                  type="number"
+                  onChange={(e) =>
+                    payloadHandler(
+                      payload,
+                      e.target.value,
+                      "last_min",
+                      (updateValue) => {
+                        setPayload(updateValue);
+                      }
+                    )
+                  }
+                  name="last_min"
+                  placeholder="Ente Last Min For Buying"
+                />
+                <ValidationMessage field={"last_min"} />
+              </Stack>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <Stack spacing={1}>
+                <InputLabel>Cancle Booking Day</InputLabel>
+                <OutlinedInput
+                  type="number"
+                  onChange={(e) =>
+                    payloadHandler(
+                      payload,
+                      e.target.value,
+                      "cancle_booking",
+                      (updateValue) => {
+                        setPayload(updateValue);
+                      }
+                    )
+                  }
+                  name="cancle_booking"
+                  placeholder="Ente Cancle Booking Day"
+                />
+                <ValidationMessage field={"cancle_booking"} />
               </Stack>
             </Grid>
 

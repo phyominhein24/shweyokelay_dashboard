@@ -42,13 +42,10 @@ export const VehiclesTypeUpdate = () => {
 
     setLoading(false);
   }, [dispatch, params.id]);
-  console.log(vehiclesTypePayload.update);
 
   useEffect(() => {
     loadingData();
   }, [loadingData]);
-
-  console.log("payload >>", payload);
 
   const submitVehiclesType = async () => {
     setLoading(true);
@@ -162,25 +159,25 @@ export const VehiclesTypeUpdate = () => {
               <Stack spacing={1}>
                 <InputLabel>Seat Layout (required)</InputLabel>
                 <Select
-                  id="seatLayout"
+                  id="seat_layout"
                   value={payload.seat_layout ? payload.seat_layout : ""}
                   onChange={(e) =>
                     payloadHandler(
                       payload,
                       e.target.value,
-                      "seatLayout",
+                      "seat_layout",
                       (updateValue) => {
                         setPayload(updateValue);
                       }
                     )
                   }
-                  name="seatLayout"
+                  name="seat_layout"
                 >
                   <MenuItem value="2:1">2:1</MenuItem>
                   <MenuItem value="2:2">2:2</MenuItem>
                   <MenuItem value="2:3">2:3</MenuItem>
                 </Select>
-                <ValidationMessage field={"seatLayout"} />
+                <ValidationMessage field={"seat_layout"} />
               </Stack>
             </Grid>
 
