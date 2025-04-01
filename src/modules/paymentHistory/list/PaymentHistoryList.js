@@ -28,6 +28,7 @@ import AlertDialog from "../../../shares/AlertDialog";
 import EmptyData from "../../../shares/EmptyData";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+import StatusColor from "../../../shares/StatusColor";
 
 export const PaymentHistoryList = () => {
     const { paymentHistorys, paginateParams } = useSelector((state) => state.paymentHistory);
@@ -289,10 +290,24 @@ export const PaymentHistoryList = () => {
                                                     const switchCase = ({ column, value }) => {
                                                         switch (column.id) {
                                                             
-                                                            case "open_time":
-                                                                return TimetoAmPm(value);
-                                                            case "close_time":
-                                                                return TimetoAmPm(value);
+                                                            case "seat":
+                                                                return <p>
+                                                                    {Array.isArray(value) 
+                                                                        ? value.map(seat => `${seat.number}(${seat.type})`).join(", ") 
+                                                                        : Array.isArray(JSON.parse(value)) 
+                                                                            ? JSON.parse(value).map(seat => `${seat.number}(${seat.type})`).join(", ") 
+                                                                            : "No data"}
+                                                                </p>
+                                                            case "start_time":
+                                                                return <p>
+                                                                    {value ? value.split("T")[0] : "No date available"}
+                                                                    ({row['route']?.departure 
+                                                                    ? ((h, m) => `${h % 12 || 12}:${m.toString().padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`)
+                                                                        (...row['route']?.departure.split(":").map(Number)) 
+                                                                    : "No time available"})
+                                                                </p>
+                                                            case "status":
+                                                                return <StatusColor value={value} />  
                                                             case "option":
                                                                 return (
                                                                     <>

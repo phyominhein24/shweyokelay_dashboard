@@ -26,6 +26,7 @@ import ReloadData from "../../../shares/ReloadData";
 import AlertDialog from "../../../shares/AlertDialog";
 import EmptyData from "../../../shares/EmptyData";
 import { endpoints } from "../../../constants/endpoints";
+import StatusColor from "../../../shares/StatusColor";
 
 export const UserList = () => {
     const { users, paginateParams } = useSelector((state) => state.user);
@@ -271,6 +272,8 @@ export const UserList = () => {
                                                             
                                                             case "image":
                                                                 return  <Avatar alt="icon" src={value ? `${endpoints.image}${value}` : null} />
+                                                            case "status":
+                                                                return <StatusColor value={value} /> 
                                                             case "option":
                                                                 return (
                                                                     <NavigateId url={`${paths.user}/${row.id}`} id={row.id} />

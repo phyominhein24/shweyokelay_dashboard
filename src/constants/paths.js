@@ -31,6 +31,9 @@ export const paths = {
     payment: "/payment",
     paymentCreate: "/payment/new",
 
+    contact: "/contact",
+    contactCreate: "/contact/new",
+
     dailyRoute: "/dailyRoute",
     dailyRouteCreate: "/dailyRoute/new",
 

@@ -19,6 +19,10 @@ const getStatusColor = (status) => {
       return '#2196F3'; // Vibrant blue for active
     case 'inactive':
       return '#9E9E9E'; // Neutral grey for inactive
+    case 'transfer':
+      return '#2196F3';
+    case 'added':
+      return '#4CAF50'
     default:
       return '#BDBDBD'; // Light grey for unknown/default
   }

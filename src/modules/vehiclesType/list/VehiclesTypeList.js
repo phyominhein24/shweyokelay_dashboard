@@ -26,6 +26,7 @@ import ReloadData from "../../../shares/ReloadData";
 import AlertDialog from "../../../shares/AlertDialog";
 import EmptyData from "../../../shares/EmptyData";
 import { endpoints } from "../../../constants/endpoints";
+import StatusColor from "../../../shares/StatusColor";
 
 export const VehiclesTypeList = () => {
     const { vehiclesTypes, paginateParams } = useSelector((state) => state.vehiclesType);
@@ -268,7 +269,10 @@ export const VehiclesTypeList = () => {
 
                                                     const switchCase = ({ column, value }) => {
                                                         switch (column.id) {
-                                                            
+                                                            case "facilities":
+                                                                return Array.isArray(value) ? value.join(", ") : "No facilities available";
+                                                            case "status":
+                                                                return <StatusColor value={value} />  
                                                             case "image":
                                                                 return  <Avatar alt="icon" src={value ? `${endpoints.image}${value}` : null} />
                                                             case "option":

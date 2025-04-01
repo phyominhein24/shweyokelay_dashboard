@@ -26,6 +26,7 @@ import { getData, setData } from "../../../helpers/localstorage";
 import ReloadData from "../../../shares/ReloadData";
 import AlertDialog from "../../../shares/AlertDialog";
 import EmptyData from "../../../shares/EmptyData";
+import StatusColor from "../../../shares/StatusColor";
 
 export const CounterList = () => {
     const { counters, paginateParams } = useSelector((state) => state.counter);
@@ -273,6 +274,8 @@ export const CounterList = () => {
                                                                 return TimetoAmPm(value);
                                                             case "close_time":
                                                                 return TimetoAmPm(value);
+                                                            case "status":
+                                                                return <StatusColor value={value} /> 
                                                             case "option":
                                                                 return (
                                                                     <NavigateId url={`${paths.counter}/${row.id}`} id={row.id} />

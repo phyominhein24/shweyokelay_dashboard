@@ -175,6 +175,13 @@ export const items = [
         ],
     },
     {
+        key: "0",
+        label: "Contact",
+        data: "Contact",
+        icon: <GroupsIcon />,
+        url: paths.contact,
+    },
+    {
         key: "2",
         label: "Payment",
         data: "Payment",
