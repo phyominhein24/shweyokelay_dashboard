@@ -1,5 +1,6 @@
-import { keys } from "../constants/config";
 import { updateError, updateNotification } from "../shares/shareSlice";
+
+import { keys } from "../constants/config";
 import { removeData } from "./localstorage";
 
 /**
@@ -87,7 +88,9 @@ export const httpServiceHandler = async (dispatch, result) => {
     result.status === 404 ||
     result.status === 403
   ) {
-    await dispatch(updateNotification({ variant: 'error', message: result.message }));
+    await dispatch(
+      updateNotification({ variant: "error", message: result.message })
+    );
   }
 
   if (result.status === 422) {
