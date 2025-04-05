@@ -16,6 +16,7 @@ import { adminRoutes } from "./modules/admin/adminRoutes";
 import { sroutesSroutes } from "./modules/sroutes/sroutesRoutes";
 import { paymentRoutes } from "./modules/payment/paymentRoutes";
 import { dailyRouteRoutes } from "./modules/dailyRoute/dailyRouteRoutes";
+import { contactRoutes } from "./modules/contact/contactRoutes";
 
 
 export const routers = createBrowserRouter([
@@ -35,7 +36,8 @@ export const routers = createBrowserRouter([
             ...roleRoutes,
             ...adminRoutes,
             ...paymentRoutes,
-            ...dailyRouteRoutes
+            ...dailyRouteRoutes,
+            ...contactRoutes
         ],
     },
     {

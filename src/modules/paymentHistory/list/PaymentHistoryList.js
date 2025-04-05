@@ -38,19 +38,7 @@ import { Breadcrumb } from "../../../shares/Breadcrumbs";
 import EmptyData from "../../../shares/EmptyData";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import ExportImportButton from "../../../shares/ExportImportButton";
-import { FilterByDate } from "../../../shares/FilterByDate";
-import { FilterByStatus } from "../../../shares/FilterByStatus";
-import { NavigateId } from "../../../shares/NavigateId";
-import ReloadData from "../../../shares/ReloadData";
-import SkeletonTable from "../../../shares/SkeletonTable";
-import { TableCustomizeSetting } from "../../../shares/TableCustomizeSetting";
-import { TableSearch } from "../../../shares/TableSearch";
-import TimetoAmPm from "../../../shares/TimetoAmPm";
-import { paths } from "../../../constants/paths";
-import { paymentHistoryPayload } from "../paymentHistoryPayload";
-import { paymentHistoryService } from "../paymentHistoryService";
-import { setPaginate } from "../paymentHistorySlice";
+import StatusColor from "../../../shares/StatusColor";
 
 export const PaymentHistoryList = () => {
   const { paymentHistorys, paginateParams } = useSelector(
@@ -334,10 +322,24 @@ export const PaymentHistoryList = () => {
                                                     const switchCase = ({ column, value }) => {
                                                         switch (column.id) {
                                                             
-                                                            case "open_time":
-                                                                return TimetoAmPm(value);
-                                                            case "close_time":
-                                                                return TimetoAmPm(value);
+                                                            case "seat":
+                                                                return <p>
+                                                                    {Array.isArray(value) 
+                                                                        ? value.map(seat => `${seat.number}(${seat.type})`).join(", ") 
+                                                                        : Array.isArray(JSON.parse(value)) 
+                                                                            ? JSON.parse(value).map(seat => `${seat.number}(${seat.type})`).join(", ") 
+                                                                            : "No data"}
+                                                                </p>
+                                                            case "start_time":
+                                                                return <p>
+                                                                    {value ? value.split("T")[0] : "No date available"}
+                                                                    ({row['route']?.departure 
+                                                                    ? ((h, m) => `${h % 12 || 12}:${m.toString().padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`)
+                                                                        (...row['route']?.departure.split(":").map(Number)) 
+                                                                    : "No time available"})
+                                                                </p>
+                                                            case "status":
+                                                                return <StatusColor value={value} />  
                                                             case "option":
                                                                 return (
                                                                     <>

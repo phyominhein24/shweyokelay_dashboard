@@ -1,237 +1,248 @@
-import { paths } from "../../constants/paths";
-import InsertChartIcon from "@mui/icons-material/InsertChart";
-import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import StoreIcon from '@mui/icons-material/Store';
 import AddIcon from "@mui/icons-material/Add";
-import CategoryIcon from '@mui/icons-material/Category';
-import Diversity1Icon from '@mui/icons-material/Diversity1';
-import GroupsIcon from '@mui/icons-material/Groups';
-import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
-import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
-import PaymentIcon from '@mui/icons-material/Payment';
-
+import AltRouteIcon from "@mui/icons-material/AltRoute";
+import ContactsIcon from "@mui/icons-material/Contacts";
+import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
+import Diversity1Icon from "@mui/icons-material/Diversity1";
+import Diversity3Icon from "@mui/icons-material/Diversity3";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import HandshakeIcon from "@mui/icons-material/Handshake";
+import InsertChartIcon from "@mui/icons-material/InsertChart";
+import PaymentIcon from "@mui/icons-material/Payment";
+import RouteIcon from "@mui/icons-material/Route";
+import StorefrontIcon from "@mui/icons-material/Storefront";
+import TimelineIcon from "@mui/icons-material/Timeline";
+import VpnKeyIcon from "@mui/icons-material/VpnKey";
+import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
+import { paths } from "../../constants/paths";
 
 export const items = [
-    {
-        key: "0",
-        label: "Dashboard",
-        data: "Documents Folder",
-        icon: <InsertChartIcon />,
-        url: "/dashboard",
-    },
-    {
-        key: "2",
-        label: "Daily Route",
-        data: "Daily Route",
-        icon: <PaymentIcon />,
-        children: [
-            {
-                key: "2-1",
-                label: "List",
-                icon: <FormatListBulletedIcon />,
-                url: paths.dailyRoute,
-            }
-        ],
-    },
-    {
-        key: "2",
-        label: "Payment History",
-        data: "Payment History",
-        icon: <PaymentIcon />,
-        children: [
-            {
-                key: "2-1",
-                label: "List",
-                icon: <FormatListBulletedIcon />,
-                url: paths.paymentHistory,
-            },
-            // {
-            //     key: "2-2",
-            //     label: "Create",
-            //     icon: <AddIcon />,
-            //     url: paths.paymentHistoryCreate,
-            // },
-        ],
-    },
-    {
-        key: "2",
-        label: "Vehicles Type",
-        data: "Vehicles Type",
-        icon: <CategoryIcon />,
-        children: [
-            {
-                key: "2-1",
-                label: "List",
-                icon: <FormatListBulletedIcon />,
-                url: paths.vehiclesType,
-            },
-            {
-                key: "2-2",
-                label: "Create",
-                icon: <AddIcon />,
-                url: paths.vehiclesTypeCreate,
-            },
-        ],
-    },
-    {
-        key: "1",
-        label: "Routes",
-        data: "Routes",
-        icon: <DirectionsBusIcon />,
-        children: [
-            {
-                key: "1-1",
-                label: "List",
-                icon: <FormatListBulletedIcon />,
-                url: paths.routes,
-            },
-            {
-                key: "1-2",
-                label: "Create",
-                icon: <AddIcon />,
-                url: paths.routesCreate,
-            },
-        ],
-    },
-    {
-        key: "1",
-        label: "Special Routes",
-        data: "Special Routes",
-        icon: <DirectionsBusIcon />,
-        children: [
-            {
-                key: "1-1",
-                label: "List",
-                icon: <FormatListBulletedIcon />,
-                url: paths.sroutes,
-            },
-            {
-                key: "1-2",
-                label: "Create",
-                icon: <AddIcon />,
-                url: paths.sroutesCreate,
-            },
-        ],
-    },
-    {
-        key: "1",
-        label: "Counter",
-        data: "Counter",
-        icon: <StoreIcon />,
-        children: [
-            {
-                key: "1-1",
-                label: "List",
-                icon: <FormatListBulletedIcon />,
-                url: paths.counter,
-            },
-            {
-                key: "1-2",
-                label: "Create",
-                icon: <AddIcon />,
-                url: paths.counterCreate,
-            },
-        ],
-    },
-    {
-        key: "1",
-        label: "Member",
-        data: "Member",
-        icon: <GroupsIcon />,
-        children: [
-            {
-                key: "1-1",
-                label: "List",
-                icon: <FormatListBulletedIcon />,
-                url: paths.member,
-            },
-            {
-                key: "1-2",
-                label: "Create",
-                icon: <AddIcon />,
-                url: paths.memberCreate,
-            },
-        ],
-    },
-    {
-        key: "1",
-        label: "Agent",
-        data: "Agent",
-        icon: <GroupsIcon />,
-        children: [
-            {
-                key: "1-1",
-                label: "List",
-                icon: <FormatListBulletedIcon />,
-                url: paths.agent,
-            },
-            {
-                key: "1-2",
-                label: "Create",
-                icon: <AddIcon />,
-                url: paths.agentCreate,
-            },
-        ],
-    },
-    {
-        key: "2",
-        label: "Payment",
-        data: "Payment",
-        icon: <CategoryIcon />,
-        children: [
-            {
-                key: "2-1",
-                label: "List",
-                icon: <FormatListBulletedIcon />,
-                url: paths.payment,
-            },
-            {
-                key: "2-2",
-                label: "Create",
-                icon: <AddIcon />,
-                url: paths.paymentCreate,
-            },
-        ],
-    },
-    {
-        key: "2",
-        label: "Role",
-        data: "Role",
-        icon: <VpnKeyIcon />,
-        children: [
-            {
-                key: "2-1",
-                label: "List",
-                icon: <FormatListBulletedIcon />,
-                url: paths.role,
-            },
-            {
-                key: "2-2",
-                label: "Create",
-                icon: <AddIcon />,
-                url: paths.roleCreate,
-            },
-        ],
-    },
-    {
-        key: "2",
-        label: "User",
-        data: "User",
-        icon: <Diversity1Icon />,
-        children: [
-            {
-                key: "2-1",
-                label: "List",
-                icon: <FormatListBulletedIcon />,
-                url: paths.user,
-            },
-            {
-                key: "2-2",
-                label: "Create",
-                icon: <AddIcon />,
-                url: paths.userCreate,
-            },
-        ],
-    },
+  {
+    key: "dashboard",
+    label: "Dashboard",
+    data: "Documents Folder",
+    icon: <InsertChartIcon />,
+    url: "/dashboard",
+  },
+  {
+    key: "vehiclesType",
+    label: "Vehicles Type",
+    data: "Vehicles Type",
+    icon: <DirectionsBusIcon />,
+    children: [
+      {
+        key: "vehiclesTypeList",
+        label: "List",
+        icon: <FormatListBulletedIcon />,
+        url: paths.vehiclesType,
+      },
+      {
+        key: "vehiclesTypeCreate",
+        label: "Create",
+        icon: <AddIcon />,
+        url: paths.vehiclesTypeCreate,
+      },
+    ],
+  },
+  {
+    key: "counter",
+    label: "Counter",
+    data: "Counter",
+    icon: <StorefrontIcon />,
+    children: [
+      {
+        key: "counterList",
+        label: "List",
+        icon: <FormatListBulletedIcon />,
+        url: paths.counter,
+      },
+      {
+        key: "counterCreate",
+        label: "Create",
+        icon: <AddIcon />,
+        url: paths.counterCreate,
+      },
+    ],
+  },
+  {
+    key: "routes",
+    label: "Routes",
+    data: "Routes",
+    icon: <RouteIcon />,
+    children: [
+      {
+        key: "routesList",
+        label: "List",
+        icon: <FormatListBulletedIcon />,
+        url: paths.routes,
+      },
+      {
+        key: "routesCreate",
+        label: "Create",
+        icon: <AddIcon />,
+        url: paths.routesCreate,
+      },
+    ],
+  },
+  {
+    key: "specialRoutes",
+    label: "Special Routes",
+    data: "Special Routes",
+    icon: <AltRouteIcon />,
+    children: [
+      {
+        key: "specialRoutesList",
+        label: "List",
+        icon: <FormatListBulletedIcon />,
+        url: paths.sroutes,
+      },
+      {
+        key: "specialRoutesCreate",
+        label: "Create",
+        icon: <AddIcon />,
+        url: paths.sroutesCreate,
+      },
+    ],
+  },
+  {
+    key: "payment",
+    label: "Payment Methods",
+    data: "Payment",
+    icon: <PaymentIcon />,
+    children: [
+      {
+        key: "paymentList",
+        label: "List",
+        icon: <FormatListBulletedIcon />,
+        url: paths.payment,
+      },
+      {
+        key: "paymentCreate",
+        label: "Create",
+        icon: <AddIcon />,
+        url: paths.paymentCreate,
+      },
+    ],
+  },
+  {
+    key: "dailyRoute",
+    label: "Daily Route",
+    data: "Daily Route",
+    icon: <TimelineIcon />,
+    children: [
+      {
+        key: "dailyRouteList",
+        label: "List",
+        icon: <FormatListBulletedIcon />,
+        url: paths.dailyRoute,
+      },
+    ],
+  },
+  {
+    key: "paymentHistory",
+    label: "Payment History",
+    data: "Payment History",
+    icon: <WorkHistoryIcon />,
+    children: [
+      {
+        key: "paymentHistoryList",
+        label: "List",
+        icon: <FormatListBulletedIcon />,
+        url: paths.paymentHistory,
+      },
+      // {
+      //     key: "2-2",
+      //     label: "Create",
+      //     icon: <AddIcon />,
+      //     url: paths.paymentHistoryCreate,
+      // },
+    ],
+  },
+  {
+    key: "member",
+    label: "Member",
+    data: "Member",
+    icon: <Diversity3Icon />,
+    children: [
+      {
+        key: "memberList",
+        label: "List",
+        icon: <FormatListBulletedIcon />,
+        url: paths.member,
+      },
+      {
+        key: "memberCreate",
+        label: "Create",
+        icon: <AddIcon />,
+        url: paths.memberCreate,
+      },
+    ],
+  },
+  {
+    key: "agent",
+    label: "Agent",
+    data: "Agent",
+    icon: <HandshakeIcon />,
+    children: [
+      {
+        key: "agentList",
+        label: "List",
+        icon: <FormatListBulletedIcon />,
+        url: paths.agent,
+      },
+      {
+        key: "agentCreate",
+        label: "Create",
+        icon: <AddIcon />,
+        url: paths.agentCreate,
+      },
+    ],
+  },
+
+  {
+    key: "user",
+    label: "User",
+    data: "User",
+    icon: <Diversity1Icon />,
+    children: [
+      {
+        key: "userList",
+        label: "List",
+        icon: <FormatListBulletedIcon />,
+        url: paths.user,
+      },
+      {
+        key: "userCreate",
+        label: "Create",
+        icon: <AddIcon />,
+        url: paths.userCreate,
+      },
+    ],
+  },
+  {
+    key: "role",
+    label: "Role",
+    data: "Role",
+    icon: <VpnKeyIcon />,
+    children: [
+      {
+        key: "roleList",
+        label: "List",
+        icon: <FormatListBulletedIcon />,
+        url: paths.role,
+      },
+      {
+        key: "roleCreate",
+        label: "Create",
+        icon: <AddIcon />,
+        url: paths.roleCreate,
+      },
+    ],
+  },
+  {
+    key: "contact",
+    label: "Contact",
+    data: "Contact",
+    icon: <ContactsIcon />,
+    url: paths.contact,
+  },
 ];

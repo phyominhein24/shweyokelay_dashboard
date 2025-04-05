@@ -1,5 +1,4 @@
 import {
-  Box,
   Grid,
   Paper,
   Table,
@@ -20,12 +19,11 @@ import { useDispatch, useSelector } from "react-redux";
 import AlertDialog from "../../../shares/AlertDialog";
 import { Breadcrumb } from "../../../shares/Breadcrumbs";
 import EmptyData from "../../../shares/EmptyData";
-import ExportImportButton from "../../../shares/ExportImportButton";
 import { FilterByDate } from "../../../shares/FilterByDate";
-import { FilterByStatus } from "../../../shares/FilterByStatus";
 import { NavigateId } from "../../../shares/NavigateId";
 import ReloadData from "../../../shares/ReloadData";
 import SkeletonTable from "../../../shares/SkeletonTable";
+import StatusColor from "../../../shares/StatusColor";
 import { TableCustomizeSetting } from "../../../shares/TableCustomizeSetting";
 import { TableSearch } from "../../../shares/TableSearch";
 import TimetoAmPm from "../../../shares/TimetoAmPm";
@@ -217,52 +215,41 @@ export const CounterList = () => {
                       <Grid
                         container
                         spacing={0.5}
+                        item
                         xs={12}
                         sm={12}
                         md={12}
                         lg={7}
                         xl={7}
                         direction="row"
-                        justifyContent="flex-start"
-                        alignTransferItems="center"
                       >
-                        <Grid transferItem xs={1}>
+                        <Grid item xs={1}>
                           <TableCustomizeSetting
                             payload={counterPayload.columns}
                             columns={columns}
                             setColumns={(e) => setColumns(e)}
                           />
                         </Grid>
-
-                        {/* <Grid transferItem xs={2}> 
-                                                    <FilterByStatus paginateParams={paginateParams} status={transferItemStatus} onFilter={onFilter} />
-                                                </Grid> */}
-
-                        <Grid transferItem xs={8}>
+                        <Grid item xs={8}>
                           <FilterByDate onFilter={onFilterByDate} />
                         </Grid>
 
-                        <Grid transferItem xs={1}>
+                        <Grid item xs={1}>
                           <ReloadData reloadData={reloadData} />
                         </Grid>
                       </Grid>
                       <Grid
                         container
                         spacing={0.5}
+                        item
                         xs={12}
                         sm={12}
                         md={12}
                         lg={5}
                         xl={5}
                         direction="row"
-                        justifyContent="flex-end"
-                        alignTransferItems="center"
                       >
-                        {/* <Grid transferItem>
-                                                    <ExportImportButton exportExcelData={()=>exportExcelData()} exportPdfData={()=>exportPdfData()} importData={(e)=>importData(e)} exportExcelParamsData={(e)=>exportExcelParamsData(e)} exportPdfParamsData={(e)=>exportPdfParamsData(e)}/>
-                                                </Grid> */}
-
-                        <Grid transferItem>
+                        <Grid>
                           <TableSearch
                             paginateParams={paginateParams}
                             onSearchChange={onSearchChange}
@@ -312,7 +299,9 @@ export const CounterList = () => {
                                 return TimetoAmPm(value);
                               case "close_time":
                                 return TimetoAmPm(value);
-                              case "option":
+                              case "status":
+                                return <StatusColor value={value} />;
+                                case "option":
                                 return (
                                   <NavigateId
                                     url={`${paths.counter}/${row.id}`}
@@ -350,46 +339,34 @@ export const CounterList = () => {
               )}
             </Table>
           </TableContainer>
-          {total == 0 && <EmptyData />}
-          <Box
-            display={"flex"}
-            alignItems={"center"}
-            justifyContent={"right"}
+          {total === 0 && <EmptyData />}
+
+          <TablePagination
+            component="div"
             sx={{
               width: "100%",
             }}
-          >
-            <TableRow>
-              <TableCell>
-                <TablePagination
-                  sx={{
-                    width: "100%",
-                  }}
-                  rowsPerPageOptions={[5, 10, 25]}
-                  colSpan={3}
-                  count={total}
-                  rowsPerPage={paginateParams.per_page}
-                  page={paginateParams ? paginateParams.page - 1 : 0}
-                  SelectProps={{
-                    inputProps: {
-                      "aria-label": "rows per page",
-                    },
-                    native: true,
-                  }}
-                  onPageChange={onPageChange}
-                  onRowsPerPageChange={onRowPerPageChange}
-                  ActionsComponent={TablePaginationActions}
-                />
-              </TableCell>
-            </TableRow>
-          </Box>
+            rowsPerPageOptions={[5, 10, 25]}
+            colSpan={3}
+            count={total}
+            rowsPerPage={paginateParams.per_page}
+            page={paginateParams ? paginateParams.page - 1 : 0}
+            SelectProps={{
+              inputProps: {
+                "aria-label": "rows per page",
+              },
+              native: true,
+            }}
+            onPageChange={onPageChange}
+            onRowsPerPageChange={onRowPerPageChange}
+            ActionsComponent={TablePaginationActions}
+          />
         </Paper>
       )}
       <AlertDialog
         onAgree={() => deleteData()}
-        title="WARNING!"
-        body="This action will permanently delete the selected data. This process cannot be undone.
-Do you wish to proceed?"
+        title="Are you sure?"
+        body="Are You Want to Delete this Data ?"
       />
     </div>
   );

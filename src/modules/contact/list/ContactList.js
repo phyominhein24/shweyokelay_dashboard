@@ -9,9 +9,9 @@ import {
     Paper, Box, TableHead, 
     TableSortLabel, Avatar
 } from "@mui/material";
-import { setPaginate } from "../dailyRouteSlice";
-import { dailyRouteService } from "../dailyRouteService";
-import { dailyRoutePayload } from "../dailyRoutePayload";
+import { setPaginate } from "../contactSlice";
+import { contactService } from "../contactService";
+import { contactPayload } from "../contactPayload";
 import { paths } from "../../../constants/paths";
 import { NavigateId } from "../../../shares/NavigateId";
 import { TableSearch } from "../../../shares/TableSearch";
@@ -26,10 +26,9 @@ import ReloadData from "../../../shares/ReloadData";
 import AlertDialog from "../../../shares/AlertDialog";
 import EmptyData from "../../../shares/EmptyData";
 import { endpoints } from "../../../constants/endpoints";
-import StatusColor from "../../../shares/StatusColor";
 
-export const DailyRouteList = () => {
-    const { dailyRoutes, paginateParams } = useSelector((state) => state.dailyRoute);
+export const ContactList = () => {
+    const { contacts, paginateParams } = useSelector((state) => state.contact);
     const { startFilterDate, endFilterDate, selectedId } = useSelector((state) => state.share );
     const dispatch = useDispatch();
 
@@ -38,9 +37,9 @@ export const DailyRouteList = () => {
     const [columnIds, setColumnIds] = useState("");
     const [sort, setSort] = useState(true);
 
-    const [columns, setColumns] = useState(getData(dailyRoutePayload.columnsName) == null ? dailyRoutePayload.columns : getData(dailyRoutePayload.columnsName));
+    const [columns, setColumns] = useState(getData(contactPayload.columnsName) == null ? contactPayload.columns : getData(contactPayload.columnsName));
 
-    const dailyRouteStatus = useRef(['ALL','ACTIVE','INACTIVE']);
+    const contactStatus = useRef(['ALL','ACTIVE','INACTIVE']);
 
     const onPageChange = (event, newPage) => {
         dispatch(
@@ -120,12 +119,12 @@ export const DailyRouteList = () => {
             loadingData();
         }
         dispatch(setDateFilter(""));
-        dispatch(setPaginate(dailyRoutePayload.paginateParams));
+        dispatch(setPaginate(contactPayload.paginateParams));
     }
 
     const deleteData = async () => {
         setIsLoading(true)
-        const result = await dailyRouteService.destory(dispatch, selectedId)
+        const result = await contactService.destory(dispatch, selectedId)
         if (result.status == 200) {
             dispatch(alertToggle())
             loadingData();
@@ -137,26 +136,26 @@ export const DailyRouteList = () => {
     }
 
     const exportExcelData = async () => {
-        await dailyRouteService.exportexcel(dispatch)
+        await contactService.exportexcel(dispatch)
     }
 
     const exportExcelParamsData = async () => {
-        await dailyRouteService.exportexcelparams(dispatch, paginateParams)
+        await contactService.exportexcelparams(dispatch, paginateParams)
     }
 
     const exportPdfData = async () => {
-        await dailyRouteService.exportpdf(dispatch)
+        await contactService.exportpdf(dispatch)
     }
 
     const exportPdfParamsData = async () => {
-        await dailyRouteService.exportpdfparams(dispatch, paginateParams)
+        await contactService.exportpdfparams(dispatch, paginateParams)
     }
 
     const importData = async (e) => {
         setIsLoading(true);
         const formData = new FormData();
         formData.append('file',e);
-        const create = await dailyRouteService.import(formData, dispatch);
+        const create = await contactService.import(formData, dispatch);
         if(create.status == 200){
             loadingData()
         }
@@ -164,15 +163,15 @@ export const DailyRouteList = () => {
     }
 
     const loadingData = useCallback(async () => {
-        const result = await dailyRouteService.index(dispatch, paginateParams);
+        const result = await contactService.index(dispatch, paginateParams);
         if (result.status === 200) {
             setTotal(
                 result.data.total
             );
         }
         setIsLoading(false)
-        if(getData(dailyRoutePayload.columnsName) == null){
-            setData(dailyRoutePayload.columnsName, dailyRoutePayload.columns)
+        if(getData(contactPayload.columnsName) == null){
+            setData(contactPayload.columnsName, contactPayload.columns)
         }
     }, [dispatch, paginateParams]);
 
@@ -182,7 +181,7 @@ export const DailyRouteList = () => {
     }, [loadingData]);
 
     useEffect(()=>{
-        setData(dailyRoutePayload.columnsName, columns)
+        setData(contactPayload.columnsName, columns)
     },[columns])
 
     return (
@@ -203,11 +202,11 @@ export const DailyRouteList = () => {
                                             <Grid container spacing={0.5} xs={12} sm={12} md={12} lg={7} xl={7} direction="row" justifyContent="flex-start" alignItems="center">
                                                 
                                                 <Grid item xs={1}>
-                                                    <TableCustomizeSetting payload={dailyRoutePayload.columns} columns={columns} setColumns={(e)=>setColumns(e)} />
+                                                    <TableCustomizeSetting payload={contactPayload.columns} columns={columns} setColumns={(e)=>setColumns(e)} />
                                                 </Grid>
 
                                                 <Grid item xs={2}> 
-                                                    <FilterByStatus paginateParams={paginateParams} status={dailyRouteStatus} onFilter={onFilter} />
+                                                    <FilterByStatus paginateParams={paginateParams} status={contactStatus} onFilter={onFilter} />
                                                 </Grid>
 
                                                 <Grid item xs={8}>
@@ -261,7 +260,7 @@ export const DailyRouteList = () => {
                             </TableHead>
                             {total !== 0 && (
                                 <TableBody>
-                                    {dailyRoutes.map((row) => {
+                                    {contacts.map((row) => {
                                         return (
                                             <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                                 {columns.map((column) => {
@@ -270,21 +269,13 @@ export const DailyRouteList = () => {
                                                     const switchCase = ({ column, value }) => {
                                                         switch (column.id) {
                                                             
-                                                            case "start_time":
-                                                                return `${row['created_at'] ? row['created_at'].substring(0, 11) : "No date available"}
-                                                                (${row['route']?.departure 
-                                                                ? ((h, m) => `${h % 12 || 12}:${m.toString().padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`)
-                                                                  (...row['route']?.departure.split(":").map(Number)) 
-                                                                : "No time available"})`;
-                                                            case "route":
-                                                                return value?.name;
-                                                            case "status":
-                                                                return <StatusColor value={value} />  
-                                                            case "image":
+                                                            case "photo":
+                                                                return  <Avatar alt="icon" src={value ? `${endpoints.image}${value}` : null} />
+                                                            case "acc_qr":
                                                                 return  <Avatar alt="icon" src={value ? `${endpoints.image}${value}` : null} />
                                                             case "option":
                                                                 return (
-                                                                    <NavigateId url={`${paths.dailyRoute}/${row.id}`} id={row.id} />
+                                                                    <NavigateId url={`${paths.contact}/${row.id}`} id={row.id} />
                                                                 )
                                                             default:
                                                                 return value;
@@ -303,7 +294,7 @@ export const DailyRouteList = () => {
                                     {emptyRows(
                                         paginateParams.page,
                                         paginateParams.rowsPerPage,
-                                        dailyRoutes
+                                        contacts
                                     ) > 0 && (
                                             <TableRow style={{ height: 53 * emptyRows }}>
                                                 <TableCell colSpan={6} />
