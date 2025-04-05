@@ -159,28 +159,30 @@ export const DefaultLayout = () => {
               </Typography>
 
               <Tooltip title="Account settings">
-                <Typography variant="h6" sx={{ display: "inline" }}>
-                  {man?.name}
-                </Typography>
-                <IconButton
-                  size="small"
-                  sx={{ ml: 2 }}
-                  aria-controls={profileOpen ? "account-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={profileOpen ? "true" : undefined}
-                >
-                  <Avatar
-                    sx={{ width: 32, height: 32 }}
-                    src={man?.image ? `${endpoints.image}${man.image}` : null}
-                  />
-                </IconButton>
-                <IconButton
-                  id="basic-button"
-                  size="small"
-                  onClick={handleClickOpen}
-                >
-                  <MoreVertIcon style={{ color: "white" }} />
-                </IconButton>
+                <span>
+                  <Typography variant="h6" sx={{ display: "inline" }}>
+                    {man?.name}
+                  </Typography>
+                  <IconButton
+                    size="small"
+                    sx={{ ml: 2 }}
+                    aria-controls={profileOpen ? "account-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={profileOpen ? "true" : undefined}
+                  >
+                    <Avatar
+                      sx={{ width: 32, height: 32 }}
+                      src={man?.image ? `${endpoints.image}${man.image}` : null}
+                    />
+                  </IconButton>
+                  <IconButton
+                    id="basic-button"
+                    size="small"
+                    onClick={handleClickOpen}
+                  >
+                    <MoreVertIcon style={{ color: "white" }} />
+                  </IconButton>
+                </span>
               </Tooltip>
               <Menu
                 id="account-menu"
