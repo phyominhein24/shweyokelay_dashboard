@@ -27,10 +27,14 @@ import { FilterByStatus } from "../../../shares/FilterByStatus";
 import { NavigateId } from "../../../shares/NavigateId";
 import ReloadData from "../../../shares/ReloadData";
 import SkeletonTable from "../../../shares/SkeletonTable";
+import StatusColor from "../../../shares/StatusColor";
 import { TableCustomizeSetting } from "../../../shares/TableCustomizeSetting";
 import { TableSearch } from "../../../shares/TableSearch";
 import { endpoints } from "../../../constants/endpoints";
-import StatusColor from "../../../shares/StatusColor";
+import { paths } from "../../../constants/paths";
+import { setPaginate } from "../userSlice";
+import { userPayload } from "../userPayload";
+import { userService } from "../userService";
 
 export const UserList = () => {
   const { users, paginateParams } = useSelector((state) => state.user);
@@ -264,96 +268,22 @@ export const UserList = () => {
                                                     <ExportImportButton exportExcelData={()=>exportExcelData()} exportPdfData={()=>exportPdfData()} importData={(e)=>importData(e)} exportExcelParamsData={(e)=>exportExcelParamsData(e)} exportPdfParamsData={(e)=>exportPdfParamsData(e)}/>
                                                 </Grid> */}
 
-                                                <Grid transferItem>
-                                                    <TableSearch paginateParams={paginateParams} onSearchChange={onSearchChange} />
-                                                </Grid>
-
-                                            </Grid>
-
-                                        </Grid>
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    {columns.map((column) => (
-                                        <TableCell
-                                            key={column.id}
-                                            align={column.align}
-                                            style={{ minWidth: column.minWidth }}
-                                        >
-                                            <TableSortLabel
-                                                active={true}
-                                                direction={ColumnSortHandle(
-                                                    column.id
-                                                )}
-                                                onClick={(e) => {
-                                                    onHandleSort(e, column.id);
-                                                    setColumnIds(column.id);
-                                                }}
-                                            >
-                                                {column.label}
-                                            </TableSortLabel>
-                                        </TableCell>
-                                    )
-                                )}
-
-                                </TableRow>
-                            </TableHead>
-                            {total !== 0 && (
-                                <TableBody>
-                                    {users.map((row) => {
-                                        return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                                                {columns.map((column) => {
-                                                    const value = row[column.id];
-
-                                                    const switchCase = ({ column, value }) => {
-                                                        switch (column.id) {
-                                                            
-                                                            case "image":
-                                                                return  <Avatar alt="icon" src={value ? `${endpoints.image}${value}` : null} />
-                                                            case "status":
-                                                                return <StatusColor value={value} /> 
-                                                            case "option":
-                                                                return (
-                                                                    <NavigateId url={`${paths.user}/${row.id}`} id={row.id} />
-                                                                )
-                                                            default:
-                                                                return value;
-                                                        }
-                                                    };
-
-                                                    return (
-                                                        <TableCell key={column.id} align={column.align} sx={{ paddingY: 0 }}>
-                                                            {switchCase({ column, value })}
-                                                        </TableCell>
-                                                    );
-                                                })}
-                                            </TableRow>
-                                        );
-                                    })}
-                                    {emptyRows(
-                                        paginateParams.page,
-                                        paginateParams.rowsPerPage,
-                                        users
-                                    ) > 0 && (
-                                            <TableRow style={{ height: 53 * emptyRows }}>
-                                                <TableCell colSpan={6} />
-                                            </TableRow>
-                                        )}
-                                </TableBody>
-                            )}
-                        </Table>
-                    </TableContainer>
-                    { total == 0 && (
-                        <EmptyData/>
-                    )}
-                    <Box
-                        display={"flex"}
-                        alignItems={"center"}
-                        justifyContent={"right"}
-                        sx={{
-                            width: "100%",
-                        }}
+                        <Grid transferItem>
+                          <TableSearch
+                            paginateParams={paginateParams}
+                            onSearchChange={onSearchChange}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ minWidth: column.minWidth }}
                     >
                       <TableSortLabel
                         active={true}
@@ -395,6 +325,8 @@ export const UserList = () => {
                                     }
                                   />
                                 );
+                              case "status":
+                                return <StatusColor value={value} />;
                               case "option":
                                 return (
                                   <NavigateId
@@ -470,9 +402,8 @@ export const UserList = () => {
       )}
       <AlertDialog
         onAgree={() => deleteData()}
-        title="WARNING!"
-        body="This action will permanently delete the selected data. This process cannot be undone.
-Do you wish to proceed?"
+        title="Are you sure?"
+        body="Are You Want to Delete this Data ?"
       />
     </div>
   );
