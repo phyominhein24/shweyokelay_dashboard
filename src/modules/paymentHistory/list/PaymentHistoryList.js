@@ -1,6 +1,7 @@
 import {
   Box,
   Grid,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -13,32 +14,24 @@ import {
 } from "@mui/material";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { TablePaginationActions, emptyRows } from "../../../constants/config";
-import { 
-    Table, Grid, TableBody, 
-    TableCell, TableContainer,
-    TablePagination, TableRow,
-    Paper, Box, TableHead, 
-    TableSortLabel, IconButton
-} from "@mui/material";
-import { setPaginate } from "../paymentHistorySlice";
-import { paymentHistoryService } from "../paymentHistoryService";
-import { paymentHistoryPayload } from "../paymentHistoryPayload";
-import { paths } from "../../../constants/paths";
-import { NavigateId } from "../../../shares/NavigateId";
-import { TableSearch } from "../../../shares/TableSearch";
-import { FilterByStatus } from "../../../shares/FilterByStatus";
-import { FilterByDate } from "../../../shares/FilterByDate";
-import { TableCustomizeSetting } from "../../../shares/TableCustomizeSetting";
 import { alertToggle, setDateFilter } from "../../../shares/shareSlice";
 import { getData, setData } from "../../../helpers/localstorage";
 import { useDispatch, useSelector } from "react-redux";
 
 import AlertDialog from "../../../shares/AlertDialog";
 import { Breadcrumb } from "../../../shares/Breadcrumbs";
+import CancelIcon from "@mui/icons-material/Cancel";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import EmptyData from "../../../shares/EmptyData";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
+import { FilterByDate } from "../../../shares/FilterByDate";
+import ReloadData from "../../../shares/ReloadData";
+import SkeletonTable from "../../../shares/SkeletonTable";
 import StatusColor from "../../../shares/StatusColor";
+import { TableCustomizeSetting } from "../../../shares/TableCustomizeSetting";
+import { TableSearch } from "../../../shares/TableSearch";
+import { paymentHistoryPayload } from "../paymentHistoryPayload";
+import { paymentHistoryService } from "../paymentHistoryService";
+import { setPaginate } from "../paymentHistorySlice";
 
 export const PaymentHistoryList = () => {
   const { paymentHistorys, paginateParams } = useSelector(
@@ -188,69 +181,79 @@ export const PaymentHistoryList = () => {
     if (result.status === 200) {
       setTotal(result.data.total);
     }
-
-    const loadingData = useCallback(async () => {
-        const result = await paymentHistoryService.index(dispatch, paginateParams);
-        if (result.status === 200) {
-            setTotal(
-                result.data.total
-            );
-        }
-        setIsLoading(false)
-        if(getData(paymentHistoryPayload.columnsName) == null){
-            setData(paymentHistoryPayload.columnsName, paymentHistoryPayload.columns)
-        }
-    }, [dispatch, paginateParams]);
-
-    const confirmTicket = async (id) => {
-        setIsLoading(true);
-        const confirm = await paymentHistoryService.show(dispatch, id, 'confirm');
-        if(confirm.status == 200){
-            loadingData()
-        }
-        setIsLoading(false); 
+    setIsLoading(false);
+    if (getData(paymentHistoryPayload.columnsName) == null) {
+      setData(paymentHistoryPayload.columnsName, paymentHistoryPayload.columns);
     }
+  }, [dispatch, paginateParams]);
 
-    const rejectTicket = async (id) => {
-        setIsLoading(true);
-        const reject = await paymentHistoryService.show(dispatch, id, 'reject');
-        if(reject.status == 200){
-            loadingData()
-        }
-        setIsLoading(false); 
+  const confirmTicket = async (id) => {
+    setIsLoading(true);
+    const confirm = await paymentHistoryService.show(dispatch, id, "confirm");
+    if (confirm.status == 200) {
+      loadingData();
     }
+    setIsLoading(false);
+  };
 
-    useEffect(() => {
-        setIsLoading(true)
-        loadingData();
-    }, [loadingData]);
+  const rejectTicket = async (id) => {
+    setIsLoading(true);
+    const reject = await paymentHistoryService.show(dispatch, id, "reject");
+    if (reject.status == 200) {
+      loadingData();
+    }
+    setIsLoading(false);
+  };
 
-    useEffect(()=>{
-        setData(paymentHistoryPayload.columnsName, columns)
-    },[columns])
+  useEffect(() => {
+    setIsLoading(true);
+    loadingData();
+  }, [loadingData]);
 
-    return (
-        <div>
-            <Breadcrumb />
+  useEffect(() => {
+    setData(paymentHistoryPayload.columnsName, columns);
+  }, [columns]);
 
-            {isLoading ? (<SkeletonTable />):(
-                <Paper
-                    sx={{ width: "100%", overflow: "hidden", marginTop: "10px" }}
-                >
-                    <TableContainer sx={{ maxHeight: 540 }}>
-                        <Table sx={{ minWidth: 500 }}>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell colSpan={12}>
-                                        <Grid container spacing={2} direction="row" sx={{ paddingTop: 1 }}>
+  return (
+    <div>
+      <Breadcrumb />
 
-                                            <Grid container spacing={0.5} xs={12} sm={12} md={12} lg={7} xl={7} direction="row" justifyContent="flex-start" alignTransferItems="center">
-                                                
-                                                <Grid transferItem xs={1}>
-                                                    <TableCustomizeSetting payload={paymentHistoryPayload.columns} columns={columns} setColumns={(e)=>setColumns(e)} />
-                                                </Grid>
+      {isLoading ? (
+        <SkeletonTable />
+      ) : (
+        <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "10px" }}>
+          <TableContainer sx={{ maxHeight: 540 }}>
+            <Table sx={{ minWidth: 500 }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell colSpan={12}>
+                    <Grid
+                      container
+                      spacing={2}
+                      direction="row"
+                      sx={{ paddingTop: 1 }}
+                    >
+                      <Grid
+                        container
+                        spacing={0.5}
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={7}
+                        xl={7}
+                        direction="row"
+                        justifyContent="flex-start"
+                        alignTransferItems="center"
+                      >
+                        <Grid transferItem xs={1}>
+                          <TableCustomizeSetting
+                            payload={paymentHistoryPayload.columns}
+                            columns={columns}
+                            setColumns={(e) => setColumns(e)}
+                          />
+                        </Grid>
 
-                                                {/* <Grid transferItem xs={2}> 
+                        {/* <Grid transferItem xs={2}> 
                                                     <FilterByStatus paginateParams={paginateParams} status={transferItemStatus} onFilter={onFilter} />
                                                 </Grid> */}
 
@@ -275,134 +278,25 @@ export const PaymentHistoryList = () => {
                         alignTransferItems="center"
                       >
                         {/* <Grid transferItem>
-                                <ExportImportButton exportExcelData={()=>exportExcelData()} exportPdfData={()=>exportPdfData()} importData={(e)=>importData(e)} exportExcelParamsData={(e)=>exportExcelParamsData(e)} exportPdfParamsData={(e)=>exportPdfParamsData(e)}/>
-                            </Grid> */}
-                                                <Grid transferItem>
-                                                    <TableSearch paginateParams={paginateParams} onSearchChange={onSearchChange} />
-                                                </Grid>
+                                                    <ExportImportButton exportExcelData={()=>exportExcelData()} exportPdfData={()=>exportPdfData()} importData={(e)=>importData(e)} exportExcelParamsData={(e)=>exportExcelParamsData(e)} exportPdfParamsData={(e)=>exportPdfParamsData(e)}/>
+                                                </Grid> */}
 
-                                            </Grid>
-
-                                        </Grid>
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    {columns.map((column) => (
-                                        <TableCell
-                                            key={column.id}
-                                            align={column.align}
-                                            style={{ minWidth: column.minWidth }}
-                                        >
-                                            <TableSortLabel
-                                                active={true}
-                                                direction={ColumnSortHandle(
-                                                    column.id
-                                                )}
-                                                onClick={(e) => {
-                                                    onHandleSort(e, column.id);
-                                                    setColumnIds(column.id);
-                                                }}
-                                            >
-                                                {column.label}
-                                            </TableSortLabel>
-                                        </TableCell>
-                                    )
-                                )}
-
-                                </TableRow>
-                            </TableHead>
-                            {total !== 0 && (
-                                <TableBody>
-                                    {paymentHistorys.map((row) => {
-                                        return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                                                {columns.map((column) => {
-                                                    const value = row[column.id];
-
-                                                    const switchCase = ({ column, value }) => {
-                                                        switch (column.id) {
-                                                            
-                                                            case "seat":
-                                                                return <p>
-                                                                    {Array.isArray(value) 
-                                                                        ? value.map(seat => `${seat.number}(${seat.type})`).join(", ") 
-                                                                        : Array.isArray(JSON.parse(value)) 
-                                                                            ? JSON.parse(value).map(seat => `${seat.number}(${seat.type})`).join(", ") 
-                                                                            : "No data"}
-                                                                </p>
-                                                            case "start_time":
-                                                                return <p>
-                                                                    {value ? value.split("T")[0] : "No date available"}
-                                                                    ({row['route']?.departure 
-                                                                    ? ((h, m) => `${h % 12 || 12}:${m.toString().padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`)
-                                                                        (...row['route']?.departure.split(":").map(Number)) 
-                                                                    : "No time available"})
-                                                                </p>
-                                                            case "status":
-                                                                return <StatusColor value={value} />  
-                                                            case "option":
-                                                                return (
-                                                                    <>
-                                                                        <IconButton
-                                                                            sx={{ cursor: 'pointer', marginRight: 1 }}
-                                                                            onClick={() => {
-                                                                                if (window.confirm("Are you sure you want to confirm this ticket?")) {
-                                                                                    confirmTicket(row.id);
-                                                                                }
-                                                                            }}
-                                                                        >
-                                                                            <CheckCircleIcon style={{ color: '#1876D2' }} />
-                                                                        </IconButton>
-
-                                                                        <IconButton
-                                                                            sx={{ cursor: 'pointer' }}
-                                                                            onClick={() => {
-                                                                                if (window.confirm("Are you sure you want to reject this ticket?")) {
-                                                                                    rejectTicket(row.id);
-                                                                                }
-                                                                            }}
-                                                                        >
-                                                                            <CancelIcon style={{ color: 'red' }} />
-                                                                        </IconButton>
-                                                                    </>
-                                                                )
-                                                            default:
-                                                                return value;
-                                                        }
-                                                    };
-
-                                                    return (
-                                                        <TableCell key={column.id} align={column.align} sx={{ paddingY: 0 }}>
-                                                            {switchCase({ column, value })}
-                                                        </TableCell>
-                                                    );
-                                                })}
-                                            </TableRow>
-                                        );
-                                    })}
-                                    {emptyRows(
-                                        paginateParams.page,
-                                        paginateParams.rowsPerPage,
-                                        paymentHistorys
-                                    ) > 0 && (
-                                            <TableRow style={{ height: 53 * emptyRows }}>
-                                                <TableCell colSpan={6} />
-                                            </TableRow>
-                                        )}
-                                </TableBody>
-                            )}
-                        </Table>
-                    </TableContainer>
-                    { total == 0 && (
-                        <EmptyData/>
-                    )}
-                    <Box
-                        display={"flex"}
-                        alignItems={"center"}
-                        justifyContent={"right"}
-                        sx={{
-                            width: "100%",
-                        }}
+                        <Grid transferItem>
+                          <TableSearch
+                            paginateParams={paginateParams}
+                            onSearchChange={onSearchChange}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ minWidth: column.minWidth }}
                     >
                       <TableSortLabel
                         active={true}
@@ -433,16 +327,86 @@ export const PaymentHistoryList = () => {
 
                           const switchCase = ({ column, value }) => {
                             switch (column.id) {
-                              case "open_time":
-                                return TimetoAmPm(value);
-                              case "close_time":
-                                return TimetoAmPm(value);
+
+                              case "seat":
+                                return (
+                                  <p>
+                                    {Array.isArray(value)
+                                      ? value
+                                          .map(
+                                            (seat) =>
+                                              `${seat.number}(${seat.type})`
+                                          )
+                                          .join(", ")
+                                      : Array.isArray(JSON.parse(value))
+                                      ? JSON.parse(value)
+                                          .map(
+                                            (seat) =>
+                                              `${seat.number}(${seat.type})`
+                                          )
+                                          .join(", ")
+                                      : "No data"}
+                                  </p>
+                                );
+                              case "start_time":
+                                return (
+                                  <p>
+                                    {value
+                                      ? value.split("T")[0]
+                                      : "No date available"}
+                                    (
+                                    {row["route"]?.departure
+                                      ? ((h, m) =>
+                                          `${h % 12 || 12}:${m
+                                            .toString()
+                                            .padStart(2, "0")} ${
+                                            h >= 12 ? "PM" : "AM"
+                                          }`)(
+                                          ...row["route"]?.departure
+                                            .split(":")
+                                            .map(Number)
+                                        )
+                                      : "No time available"}
+                                    )
+                                  </p>
+                                );
+                              case "status":
+                                return <StatusColor value={value} />;
                               case "option":
                                 return (
-                                  <NavigateId
-                                    url={`${paths.paymentHistory}/${row.id}`}
-                                    id={row.id}
-                                  />
+                                  <>
+                                    <IconButton
+                                      sx={{ cursor: "pointer", marginRight: 1 }}
+                                      onClick={() => {
+                                        if (
+                                          window.confirm(
+                                            "Are you sure you want to confirm this ticket?"
+                                          )
+                                        ) {
+                                          confirmTicket(row.id);
+                                        }
+                                      }}
+                                    >
+                                      <CheckCircleIcon
+                                        style={{ color: "#1876D2" }}
+                                      />
+                                    </IconButton>
+
+                                    <IconButton
+                                      sx={{ cursor: "pointer" }}
+                                      onClick={() => {
+                                        if (
+                                          window.confirm(
+                                            "Are you sure you want to reject this ticket?"
+                                          )
+                                        ) {
+                                          rejectTicket(row.id);
+                                        }
+                                      }}
+                                    >
+                                      <CancelIcon style={{ color: "red" }} />
+                                    </IconButton>
+                                  </>
                                 );
                               default:
                                 return value;
@@ -512,9 +476,10 @@ export const PaymentHistoryList = () => {
       )}
       <AlertDialog
         onAgree={() => deleteData()}
-        title="WARNING!"
-        body="This action will permanently delete the selected data. This process cannot be undone.
-Do you wish to proceed?"
+        title="Are you sure?"
+        body="Are You Want to Delete this Data ?"
+        //title="WARNING!"
+        //body="This action will permanently delete the selected data. This process cannot be undone.
       />
     </div>
   );
