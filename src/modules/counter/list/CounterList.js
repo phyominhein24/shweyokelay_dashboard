@@ -230,7 +230,6 @@ export const CounterList = () => {
                             setColumns={(e) => setColumns(e)}
                           />
                         </Grid>
-
                         <Grid item xs={8}>
                           <FilterByDate onFilter={onFilterByDate} />
                         </Grid>
@@ -302,7 +301,7 @@ export const CounterList = () => {
                                 return TimetoAmPm(value);
                               case "status":
                                 return <StatusColor value={value} />;
-                              case "option":
+                                case "option":
                                 return (
                                   <NavigateId
                                     url={`${paths.counter}/${row.id}`}

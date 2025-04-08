@@ -327,6 +327,7 @@ export const PaymentHistoryList = () => {
 
                           const switchCase = ({ column, value }) => {
                             switch (column.id) {
+
                               case "seat":
                                 return (
                                   <p>
@@ -477,6 +478,8 @@ export const PaymentHistoryList = () => {
         onAgree={() => deleteData()}
         title="Are you sure?"
         body="Are You Want to Delete this Data ?"
+        //title="WARNING!"
+        //body="This action will permanently delete the selected data. This process cannot be undone.
       />
     </div>
   );
