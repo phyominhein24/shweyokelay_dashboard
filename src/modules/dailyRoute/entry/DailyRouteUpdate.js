@@ -34,17 +34,6 @@ export const DailyRouteUpdate = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const loadingData = useCallback(async () => {
-    setLoading(true);
-    await dailyRouteService.show(dispatch, params.id);
-
-    setLoading(false);
-  }, [dispatch, params.id]);
-
-  useEffect(() => {
-    loadingData();
-  }, [loadingData]);
-
   const submitDailyRoute = async () => {
     setLoading(true);
     try {
@@ -64,22 +53,15 @@ export const DailyRouteUpdate = () => {
     }
   };
 
+  const loadingData = useCallback(async () => {
+    setLoading(true);
+    await dailyRouteService.show(dispatch, params.id);
+    setLoading(false);
+  }, [dispatch, params.id]);
+
   useEffect(() => {
-    if (dailyRoute) {
-      const updatePayload = { ...dailyRoute };
-
-      if (typeof dailyRoute.facilities === "string") {
-        try {
-          updatePayload.facilities = JSON.parse(dailyRoute.facilities);
-        } catch (error) {
-          console.error("Failed to parse facilities:", error);
-          updatePayload.facilities = [];
-        }
-      }
-
-      setPayload(updatePayload);
-    }
-  }, [dailyRoute]);
+    loadingData();
+  }, [loadingData]);
 
   useEffect(() => {
     if (dailyRoute) {
@@ -100,95 +82,76 @@ export const DailyRouteUpdate = () => {
 
             <Grid item xs={12} md={4}>
               <Stack spacing={1}>
-                <InputLabel>Name (required)</InputLabel>
+                <InputLabel> Driver Name (required)</InputLabel>
                 <OutlinedInput
                   type="text"
                   onChange={(e) =>
                     payloadHandler(
                       payload,
                       e.target.value,
-                      "name",
+                      "driver_name",
                       (updateValue) => {
                         setPayload(updateValue);
                       }
                     )
                   }
-                  name="name"
-                  placeholder="Enter DailyRoute Name"
+                  name="driver_name"
+                  placeholder="Enter DailyRoute Driver Name"
+                  value={payload.driver_name ? payload.driver_name : ""}
                 />
-                <ValidationMessage field={"name"} />
-              </Stack>
-            </Grid>
-  
-            <Grid item xs={12} md={4}>
-                <Stack spacing={1} >
-                  <InputLabel>Photo (required)</InputLabel>
-                  <Profile
-                    preview={payload.photo ? payload.photo : null}
-                    onSelect={(e) => payloadHandler(payload, e, 'photo', (updateValue) => {
-                        setPayload(updateValue);
-                    })}
-                  />
-                  <ValidationMessage field={"photo"} />
-                </Stack>
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <Stack spacing={1}>
-                <InputLabel>Acc Name (required)</InputLabel>
-                <OutlinedInput
-                  type="text"
-                  onChange={(e) =>
-                    payloadHandler(
-                      payload,
-                      e.target.value,
-                      "acc_name",
-                      (updateValue) => {
-                        setPayload(updateValue);
-                      }
-                    )
-                  }
-                  name="acc_name"
-                  placeholder="Enter DailyRoute Acc Name"
-                />
-                <ValidationMessage field={"acc_name"} />
+                <ValidationMessage field={"driver_name"} />
               </Stack>
             </Grid>
 
             <Grid item xs={12} md={4}>
               <Stack spacing={1}>
-                <InputLabel>Acc Number (required)</InputLabel>
+                <InputLabel> Car Number (required)</InputLabel>
                 <OutlinedInput
                   type="number"
                   onChange={(e) =>
                     payloadHandler(
                       payload,
                       e.target.value,
-                      "acc_number",
+                      "car_no",
                       (updateValue) => {
                         setPayload(updateValue);
                       }
                     )
                   }
-                  name="acc_number"
-                  placeholder="Enter DailyRoute Acc Number"
+                  name="car_no"
+                  value={payload.car_no ? payload.car_no : ""}
+                  placeholder="Enter DailyRoute Car Number"
                 />
-                <ValidationMessage field={"acc_number"} />
+                <ValidationMessage field={"car_no"} />
               </Stack>
             </Grid>
 
             <Grid item xs={12} md={4}>
-              <Stack spacing={1} >
-                <InputLabel>Acc Qr (required)</InputLabel>
-                <ProfileImage
-                  preview={payload.acc_qr ? payload.acc_qr : null}
-                  onSelect={(e) => payloadHandler(payload, e, 'acc_qr', (updateValue) => {
-                      setPayload(updateValue);
-                  })}
-                />
-                <ValidationMessage field={"acc_qr"} />
-              </Stack>
+                <Stack spacing={1}>
+                    <InputLabel >Status (required)</InputLabel>
+                    <Select
+                        id="status"
+                        value={payload.status ? payload.status : ""}
+                        onChange={(e) =>
+                        payloadHandler(
+                            payload,
+                            e.target.value,
+                            "status",
+                            (updateValue) => {
+                            setPayload(updateValue);
+                            }
+                        )}
+                        name="status"
+                    >
+                        <MenuItem value="ACTIVE">Active</MenuItem>
+                        <MenuItem value="INACTIVE">Inactive</MenuItem>
+                    </Select>
+                    <ValidationMessage field={"status"} />
+                </Stack>
             </Grid>
+
+            <h2>{payload.start_date}</h2>
+
 
             <FormMainAction
               cancel="Cancle"

@@ -114,6 +114,7 @@ export const PaymentUpdate = () => {
                     )
                   }
                   name="name"
+                  value={payload.name ? payload.name : ""}
                   placeholder="Enter Payment Name"
                 />
                 <ValidationMessage field={"name"} />
@@ -149,6 +150,7 @@ export const PaymentUpdate = () => {
                     )
                   }
                   name="acc_name"
+                  value={payload.acc_name ? payload.acc_name : ""}
                   placeholder="Enter Payment Acc Name"
                 />
                 <ValidationMessage field={"acc_name"} />
@@ -171,6 +173,7 @@ export const PaymentUpdate = () => {
                     )
                   }
                   name="acc_number"
+                  value={payload.acc_number ? payload.acc_number : ""}
                   placeholder="Enter Payment Acc Number"
                 />
                 <ValidationMessage field={"acc_number"} />

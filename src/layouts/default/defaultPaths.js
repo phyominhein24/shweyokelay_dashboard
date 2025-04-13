@@ -24,6 +24,40 @@ export const items = [
     url: "/dashboard",
   },
   {
+    key: "dailyRoute",
+    label: "Daily Route",
+    data: "Daily Route",
+    icon: <TimelineIcon />,
+    children: [
+      {
+        key: "dailyRouteList",
+        label: "List",
+        icon: <FormatListBulletedIcon />,
+        url: paths.dailyRoute,
+      },
+    ],
+  },
+  {
+    key: "paymentHistory",
+    label: "Payment History",
+    data: "Payment History",
+    icon: <WorkHistoryIcon />,
+    children: [
+      {
+        key: "paymentHistoryList",
+        label: "List",
+        icon: <FormatListBulletedIcon />,
+        url: paths.paymentHistory,
+      },
+      // {
+      //     key: "2-2",
+      //     label: "Create",
+      //     icon: <AddIcon />,
+      //     url: paths.paymentHistoryCreate,
+      // },
+    ],
+  },
+  {
     key: "vehiclesType",
     label: "Vehicles Type",
     data: "Vehicles Type",
@@ -121,40 +155,6 @@ export const items = [
         icon: <AddIcon />,
         url: paths.paymentCreate,
       },
-    ],
-  },
-  {
-    key: "dailyRoute",
-    label: "Daily Route",
-    data: "Daily Route",
-    icon: <TimelineIcon />,
-    children: [
-      {
-        key: "dailyRouteList",
-        label: "List",
-        icon: <FormatListBulletedIcon />,
-        url: paths.dailyRoute,
-      },
-    ],
-  },
-  {
-    key: "paymentHistory",
-    label: "Payment History",
-    data: "Payment History",
-    icon: <WorkHistoryIcon />,
-    children: [
-      {
-        key: "paymentHistoryList",
-        label: "List",
-        icon: <FormatListBulletedIcon />,
-        url: paths.paymentHistory,
-      },
-      // {
-      //     key: "2-2",
-      //     label: "Create",
-      //     icon: <AddIcon />,
-      //     url: paths.paymentHistoryCreate,
-      // },
     ],
   },
   {

@@ -48,7 +48,6 @@ export const routesPayload = {
         { id: "duration", label: "Duration", minWidth: 100 },
         { id: "is_ac", label: "AC", minWidth: 100 },
         { id: "day_off", label: "Day Off", minWidth: 100 },
-        { id: "start_date", label: "Start Date", minWidth: 100 },
         { id: "price", label: "Local Price", minWidth: 100 },
         { id: "fprice", label: "Foreigner Price", minWidth: 100 },
         { id: "last_min", label: "Last Min For Buying", minWidth: 100 },

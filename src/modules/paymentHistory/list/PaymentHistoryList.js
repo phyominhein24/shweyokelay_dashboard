@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Grid,
   IconButton,
@@ -32,6 +33,8 @@ import { TableSearch } from "../../../shares/TableSearch";
 import { paymentHistoryPayload } from "../paymentHistoryPayload";
 import { paymentHistoryService } from "../paymentHistoryService";
 import { setPaginate } from "../paymentHistorySlice";
+import { endpoints } from "../../../constants/endpoints";
+import ScreenshotPreview from "../../../shares/ScreenshotPreview";
 
 export const PaymentHistoryList = () => {
   const { paymentHistorys, paginateParams } = useSelector(
@@ -327,7 +330,8 @@ export const PaymentHistoryList = () => {
 
                           const switchCase = ({ column, value }) => {
                             switch (column.id) {
-
+                              case "member_id":
+                                return `${value} (${row["member"]?.is_agent ? `Agent : ${row["member"]?.commission}` : "Member"})`;
                               case "seat":
                                 return (
                                   <p>
@@ -372,40 +376,46 @@ export const PaymentHistoryList = () => {
                                 );
                               case "status":
                                 return <StatusColor value={value} />;
+                              case "screenshot":
+                                return <ScreenshotPreview value={value} />;
                               case "option":
                                 return (
                                   <>
-                                    <IconButton
-                                      sx={{ cursor: "pointer", marginRight: 1 }}
-                                      onClick={() => {
-                                        if (
-                                          window.confirm(
-                                            "Are you sure you want to confirm this ticket?"
-                                          )
-                                        ) {
-                                          confirmTicket(row.id);
-                                        }
-                                      }}
-                                    >
-                                      <CheckCircleIcon
-                                        style={{ color: "#1876D2" }}
-                                      />
-                                    </IconButton>
+                                  { row['status'] == "PENDING" && (
+                                    <>
+                                      <IconButton
+                                        sx={{ cursor: "pointer", marginRight: 1 }}
+                                        onClick={() => {
+                                          if (
+                                            window.confirm(
+                                              "Are you sure you want to confirm this ticket?"
+                                            )
+                                          ) {
+                                            confirmTicket(row.id);
+                                          }
+                                        }}
+                                      >
+                                        <CheckCircleIcon
+                                          style={{ color: "#1876D2" }}
+                                        />
+                                      </IconButton>
 
-                                    <IconButton
-                                      sx={{ cursor: "pointer" }}
-                                      onClick={() => {
-                                        if (
-                                          window.confirm(
-                                            "Are you sure you want to reject this ticket?"
-                                          )
-                                        ) {
-                                          rejectTicket(row.id);
-                                        }
-                                      }}
-                                    >
-                                      <CancelIcon style={{ color: "red" }} />
-                                    </IconButton>
+                                      <IconButton
+                                        sx={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                          if (
+                                            window.confirm(
+                                              "Are you sure you want to reject this ticket?"
+                                            )
+                                          ) {
+                                            rejectTicket(row.id);
+                                          }
+                                        }}
+                                      >
+                                        <CancelIcon style={{ color: "red" }} />
+                                      </IconButton>
+                                    </>
+                                  )}
                                   </>
                                 );
                               default:

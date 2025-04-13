@@ -36,7 +36,7 @@ export const AgentCreate = () => {
                 </div>
 
                 <Paper elevation={3} style={{ padding: 20, margin: 10 }}>
-                <Grid container spacing={3}>
+                    <Grid container spacing={3}>
                         <Grid item xs={12} md={4}>
                             <Stack spacing={1}>
                                 <InputLabel >
@@ -115,7 +115,7 @@ export const AgentCreate = () => {
                                     commission (required)
                                 </InputLabel>
                                 <OutlinedInput
-                                    type="text"
+                                    type="number"
                                     onChange={(e) =>
                                         payloadHandler(
                                             payload,

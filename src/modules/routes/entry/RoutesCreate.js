@@ -246,7 +246,7 @@ export const RoutesCreate = () => {
               <Stack spacing={1}>
                 <InputLabel>Distance (required)</InputLabel>
                 <OutlinedInput
-                  type="number"
+                  type="text"
                   onChange={(e) =>
                     payloadHandler(
                       payload,
@@ -336,7 +336,7 @@ export const RoutesCreate = () => {
               <Stack spacing={1}>
                 <InputLabel>Local Price</InputLabel>
                 <OutlinedInput
-                  type="number"
+                  type="text"
                   onChange={(e) =>
                     payloadHandler(
                       payload,
@@ -358,7 +358,7 @@ export const RoutesCreate = () => {
               <Stack spacing={1}>
                 <InputLabel>Foreigner Price</InputLabel>
                 <OutlinedInput
-                  type="number"
+                  type="text"
                   onChange={(e) =>
                     payloadHandler(
                       payload,
