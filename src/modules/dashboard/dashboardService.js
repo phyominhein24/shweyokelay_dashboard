@@ -25,4 +25,21 @@ export const dashboardService = {
         }
         return response;
     },
+    index: async (dispatch, params) => {
+        const response = await getRequest(endpoints.dashboard, params);
+        await httpServiceHandler(dispatch, response);
+
+        if (response.status === 200) {
+            // dispatch(
+            //     index(response.data.data ? response.data.data : response.data)
+            // );
+            dispatch(
+                updateNotification({
+                    variant: "success",
+                    message: response.message,
+                })
+            );
+        }
+        return response;
+    },
 };

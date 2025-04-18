@@ -4,7 +4,7 @@ export const imageURL = "http://localhost:8000";
 // export const imageURL = "https://api.shweyotelayexpress.com";
 
 export const endpoints = {
-  dashboard: "dashboard",
+  dashboard: "dashboard/payment-stats",
   login: "auth/login",
   counter: "counter",
   user: "user",
