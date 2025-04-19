@@ -21,7 +21,7 @@ export const RoutesUpdate = () => {
   const [startingPointOptions, setStartingPointOptions] = useState([])
   const [endingPointOptions, setEndingPointOptions] = useState([])
   const allDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const [selectedDays, setSelectedDays] = useState(payload.day_off || []);
+  const [selectedDays, setSelectedDays] = useState([]);
   const { routesData } = useSelector(state => state.routes);
   
   const params = useParams();
@@ -71,7 +71,23 @@ export const RoutesUpdate = () => {
 
   const loadingData = useCallback(async () => {
     setLoading(true);
-    await routesService.show(dispatch, params.id);
+    const result = await routesService.show(dispatch, params.id);
+    let dayOff = result?.data?.day_off;
+    if (typeof dayOff === 'string') {
+        try {
+            dayOff = JSON.parse(dayOff);
+        } catch (e) {
+            dayOff = [];
+        }
+    }
+
+    if (Array.isArray(dayOff)) {
+        dayOff = dayOff.filter(day => typeof day === "string" && allDays.includes(day.trim())).map(day => day.trim());
+        } else {
+        dayOff = [];
+    }
+
+    setSelectedDays(dayOff);
     setLoading(true);
     const vehiclesTypeResult = await getRequest(`${endpoints.vehiclesType}`);
     if (vehiclesTypeResult.status === 200) {
@@ -227,7 +243,7 @@ export const RoutesUpdate = () => {
                         Distance (required)
                     </InputLabel>
                     <OutlinedInput
-                        type="number"
+                        type="text"
                         value={payload.distance ? payload.distance : ""}
                         onChange={(e) =>
                             payloadHandler(
@@ -326,6 +342,7 @@ export const RoutesUpdate = () => {
                 <InputLabel>Local Price</InputLabel>
                 <OutlinedInput
                   type="number"
+                  value={payload.price ? payload.price : ""}
                   onChange={(e) =>
                     payloadHandler(
                       payload,
@@ -348,6 +365,7 @@ export const RoutesUpdate = () => {
                 <InputLabel>Foreigner Price</InputLabel>
                 <OutlinedInput
                   type="number"
+                  value={payload.fprice ? payload.fprice : ""}
                   onChange={(e) =>
                     payloadHandler(
                       payload,
@@ -370,6 +388,7 @@ export const RoutesUpdate = () => {
                 <InputLabel>Last Min For Buying</InputLabel>
                 <OutlinedInput
                   type="number"
+                  value={payload.last_min ? payload.last_min : ""}
                   onChange={(e) =>
                     payloadHandler(
                       payload,
@@ -392,6 +411,7 @@ export const RoutesUpdate = () => {
                 <InputLabel>Cancle Booking Day</InputLabel>
                 <OutlinedInput
                   type="number"
+                  value={payload.cancle_booking ? payload.cancle_booking : ""}
                   onChange={(e) =>
                     payloadHandler(
                       payload,

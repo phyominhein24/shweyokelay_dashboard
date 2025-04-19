@@ -7,7 +7,8 @@ import {
     TableCell, TableContainer,
     TablePagination, TableRow,
     Paper, Box, TableHead, 
-    TableSortLabel, Avatar
+    TableSortLabel, Avatar,
+    IconButton
 } from "@mui/material";
 import { setPaginate } from "../contactSlice";
 import { contactService } from "../contactService";
@@ -18,7 +19,7 @@ import { TableSearch } from "../../../shares/TableSearch";
 import { FilterByStatus } from "../../../shares/FilterByStatus";
 import { FilterByDate } from "../../../shares/FilterByDate";
 import { TableCustomizeSetting } from "../../../shares/TableCustomizeSetting";
-import { alertToggle, setDateFilter } from "../../../shares/shareSlice";
+import { alertToggle, setDateFilter, setSelectedId } from "../../../shares/shareSlice";
 import ExportImportButton from "../../../shares/ExportImportButton";
 import SkeletonTable from "../../../shares/SkeletonTable";
 import { getData, setData } from "../../../helpers/localstorage";
@@ -26,6 +27,7 @@ import ReloadData from "../../../shares/ReloadData";
 import AlertDialog from "../../../shares/AlertDialog";
 import EmptyData from "../../../shares/EmptyData";
 import { endpoints } from "../../../constants/endpoints";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export const ContactList = () => {
     const { contacts, paginateParams } = useSelector((state) => state.contact);
@@ -275,7 +277,13 @@ export const ContactList = () => {
                                                                 return  <Avatar alt="icon" src={value ? `${endpoints.image}${value}` : null} />
                                                             case "option":
                                                                 return (
-                                                                    <NavigateId url={`${paths.contact}/${row.id}`} id={row.id} />
+                                                                    <IconButton sx={{ cursor: 'pointer' }} onClick={() => 
+                                                                        {
+                                                                        dispatch(setSelectedId(row.id))
+                                                                        dispatch(alertToggle())
+                                                                        }}>
+                                                                        <DeleteIcon style={{ color: 'red' }}/>
+                                                                    </IconButton>
                                                                 )
                                                             default:
                                                                 return value;

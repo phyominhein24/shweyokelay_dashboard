@@ -27,6 +27,7 @@ export const paymentHistoryPayload = {
         { id: "member_id", label: "Member", minWidth: 200 },
         { id: "route_id", label: "Route", minWidth: 100 },
         { id: "start_time", label: "Start Time", minWidth: 200 },
+        { id: "name", label: "Name", minWidth: 80 },
         { id: "phone", label: "Phone", minWidth: 80 },
         { id: "nrc", label: "Nrc", minWidth: 100 },
         { id: "seat", label: "Seat", minWidth: 300 },

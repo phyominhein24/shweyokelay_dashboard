@@ -1,10 +1,11 @@
-export const baseURL = "http://localhost:8000/api";
-export const imageURL = "http://localhost:8000";
-// export const baseURL = "https://api.shweyotelayexpress.com/api";
-// export const imageURL = "https://api.shweyotelayexpress.com";
+// export const baseURL = "http://localhost:8000/api";
+// export const imageURL = "http://localhost:8000";
+export const baseURL = "https://api.shweyotelayexpress.com/api";
+export const imageURL = "https://api.shweyotelayexpress.com";
 
 export const endpoints = {
   dashboard: "dashboard/payment-stats",
+  topAgent: "dashboard/top-agents",
   login: "auth/login",
   counter: "counter",
   user: "user",

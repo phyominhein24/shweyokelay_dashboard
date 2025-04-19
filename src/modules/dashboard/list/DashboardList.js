@@ -17,46 +17,49 @@ export const DashboardList = () => {
     { name: "Yearly Ticket Count", count: 0 },
     { name: "Monthly Agent Ticket Count", count: 0 },
   ]);
-  const [params, setParams] = useState({})
+  const [params, setParams] = useState({});
+  const [agents, setAgents] = useState([]);
 
   const dispatch = useDispatch();
-
-  const bestSellerAgents = [
-    { rank: 1, name: 'Agent 1', sales: 0 },
-    { rank: 2, name: 'Agent 2', sales: 0 },
-    { rank: 3, name: 'Agent 3', sales: 0 },
-    { rank: 4, name: 'Agent 4', sales: 0 },
-    { rank: 5, name: 'Agent 5', sales: 0 },
-    { rank: 6, name: 'Agent 6', sales: 0 },
-    { rank: 7, name: 'Agent 7', sales: 0 },
-    { rank: 8, name: 'Agent 8', sales: 0 },
-    { rank: 9, name: 'Agent 9', sales: 0 },
-    { rank: 10, name: 'Agent 10', sales: 0 },
-  ];
 
   const loadingData = useCallback(async () => {
     try {
       setIsLoading(true);
+
       const result = await dashboardService.index(dispatch, params);
       if (result.status === 200) {
         setTotalData([
-          { name: "Today Ticket Count", count: result?.data.today },
-          { name: "Weekly Ticket Count", count: result?.data.week },
-          { name: "Monthly Ticket Count", count: result?.data.month },
-          { name: "Yearly Ticket Count", count: result?.data.year },
-          { name: "Monthly Agent Ticket Count", count: 0 }
+          { name: "Today Ticket Count", count: result?.data.today || 0 },
+          { name: "Weekly Ticket Count", count: result?.data.week || 0 },
+          { name: "Monthly Ticket Count", count: result?.data.month || 0 },
+          { name: "Yearly Ticket Count", count: result?.data.year || 0 },
+          { name: "Monthly Agent Ticket Count", count: 0 } // update later if needed
+        ]);
+
+        setChartData([
+          {
+            name: "Ticket Sales Trend",
+            data: Object.values(result?.data.trend || {})
+          }
         ]);
       }
-      setIsLoading(false);
-      setChartData([
-        { name: "Ticket Sales Trend", data: Object.values(result?.data.trend) },
-      ]);
+
+      const result2 = await dashboardService.topAgent(dispatch, params);
+      if (result2.status === 200) {
+        const formattedAgents = result2.data.map((agent, index) => ({
+          rank: index + 1,
+          name: agent.name,
+          sales: agent.total_sales,
+        }));
+        setAgents(formattedAgents);
+      }
+
     } catch (error) {
-      console.error("Error loading data:", error);
+      console.error("Error loading dashboard data:", error);
     } finally {
       setIsLoading(false);
     }
-  }, [params]);
+  }, [dispatch, params]);
 
   useEffect(() => {
     loadingData();
@@ -94,6 +97,22 @@ export const DashboardList = () => {
               <StackBars dataset={data.data} />
             </Grid>
           ))}
+
+          {/* Best Seller Agents Section */}
+          <Grid item xs={12} sx={{ mb: -3.65, mt: 1 }}>
+            <Typography sx={{ fontWeight: 'bold' }} variant="h5">Top 10 Best Seller Agents</Typography>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Divider sx={{ mb: 2 }} />
+            <Grid container spacing={2}>
+              {agents?.map((agent, index) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                  <Typography variant="body1">{`Rank ${agent.rank}: ${agent.name} - ${agent.sales} Sales`}</Typography>
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
         </Grid>
       )}
     </div>
