@@ -26,6 +26,7 @@ import ReloadData from "../../../shares/ReloadData";
 import AlertDialog from "../../../shares/AlertDialog";
 import EmptyData from "../../../shares/EmptyData";
 import { endpoints } from "../../../constants/endpoints";
+import ScreenshotPreview from "../../../shares/ScreenshotPreview";
 
 export const PaymentList = () => {
     const { payments, paginateParams } = useSelector((state) => state.payment);
@@ -270,9 +271,9 @@ export const PaymentList = () => {
                                                         switch (column.id) {
                                                             
                                                             case "photo":
-                                                                return  <Avatar alt="icon" src={value ? `${endpoints.image}${value}` : null} />
+                                                                return <ScreenshotPreview value={value} />;
                                                             case "acc_qr":
-                                                                return  <Avatar alt="icon" src={value ? `${endpoints.image}${value}` : null} />
+                                                                return <ScreenshotPreview value={value} />;
                                                             case "option":
                                                                 return (
                                                                     <NavigateId url={`${paths.payment}/${row.id}`} id={row.id} />

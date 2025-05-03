@@ -4,41 +4,62 @@ import { Breadcrumb } from '../../../shares/Breadcrumbs';
 import AnalyticEcommerce from '../../../shares/AnalyticEcommerce';
 import StackBars from '../../../shares/StackBars';
 import SkeletonDashboard from '../../../shares/SkeletonDashboard';
+import { dashboardService } from '../dashboardService';
+import { useDispatch } from 'react-redux';
 
 export const DashboardList = () => {
-
   const [isLoading, setIsLoading] = useState(true);
-
-  // Fake data for the dashboard
-  const total_data = [
+  const [chartData, setChartData] = useState([]);
+  const [totalData, setTotalData] = useState([
     { name: "Today Ticket Count", count: 0 },
     { name: "Weekly Ticket Count", count: 0 },
     { name: "Monthly Ticket Count", count: 0 },
     { name: "Yearly Ticket Count", count: 0 },
     { name: "Monthly Agent Ticket Count", count: 0 },
-  ];
+  ]);
+  const [params, setParams] = useState({});
+  const [agents, setAgents] = useState([]);
 
-  const chart_data = [
-    { name: "Ticket Sales Trend", data: [100, 200, 300, 400, 350, 500, 600] }, // Fake trend data
-  ];
+  const dispatch = useDispatch();
 
-  const bestSellerAgents = [
-    { rank: 1, name: 'Agent 1', sales: 0 },
-    { rank: 2, name: 'Agent 2', sales: 0 },
-    { rank: 3, name: 'Agent 3', sales: 0 },
-    { rank: 4, name: 'Agent 4', sales: 0 },
-    { rank: 5, name: 'Agent 5', sales: 0 },
-    { rank: 6, name: 'Agent 6', sales: 0 },
-    { rank: 7, name: 'Agent 7', sales: 0 },
-    { rank: 8, name: 'Agent 8', sales: 0 },
-    { rank: 9, name: 'Agent 9', sales: 0 },
-    { rank: 10, name: 'Agent 10', sales: 0 },
-  ];
+  const loadingData = useCallback(async () => {
+    try {
+      setIsLoading(true);
 
-  // Simulate loading data with fake data
-  const loadingData = useCallback(() => {
-    setIsLoading(false); // Remove loading state after setting data
-  }, []);
+      const result = await dashboardService.index(dispatch, params);
+      if (result.status === 200) {
+        setTotalData([
+          { name: "Today Ticket Count", count: result?.data.today || 0 },
+          { name: "Weekly Ticket Count", count: result?.data.week || 0 },
+          { name: "Monthly Ticket Count", count: result?.data.month || 0 },
+          { name: "Yearly Ticket Count", count: result?.data.year || 0 },
+          { name: "Monthly Agent Ticket Count", count: 0 } // update later if needed
+        ]);
+
+        setChartData([
+          {
+            name: "Ticket Sales Trend",
+            data: Object.values(result?.data.trend || {})
+          }
+        ]);
+      }
+
+      const result2 = await dashboardService.topAgent(dispatch, params);
+      if (result2.status === 200) {
+        const formattedAgents = result2.data.map((agent, index) => ({
+          rank: index + 1,
+          name: agent.name,
+          sales: agent.total_sales,
+        }));
+        setAgents(formattedAgents);
+      }
+
+    } catch (error) {
+      console.error("Error loading dashboard data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [dispatch, params]);
 
   useEffect(() => {
     loadingData();
@@ -47,26 +68,30 @@ export const DashboardList = () => {
   return (
     <div>
       <Breadcrumb />
-      {isLoading ? <SkeletonDashboard /> : (
-        <Grid container rowSpacing={4.5} columnSpacing={2.75}>
 
-          {/* Total Count Section */}
-          <Grid item xs={12} sx={{ mb: -3.65, mt: 1 }}>
+      {isLoading ? (
+        <SkeletonDashboard />
+      ) : (
+        <Grid container rowSpacing={4.5} columnSpacing={2.75}>
+          {/* Total Count Header */}
+          <Grid item xs={12}>
             <Typography sx={{ fontWeight: 'bold' }} variant="h5">Total Count</Typography>
           </Grid>
 
-          {total_data.map((data, index) => (
-            <Grid item xs={3} sm={3} md={3} lg={3} key={index}>
+          {/* Total Count Cards */}
+          {totalData.map((data, index) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
               <AnalyticEcommerce title={data.name} count={data.count} />
             </Grid>
           ))}
 
-          {/* Ticket Sales Trend */}
-          <Grid item xs={12} sx={{ mb: -3.65, mt: 1 }}>
-            <Typography sx={{ fontWeight: 'bold' }} variant="h5">Item List</Typography>
+          {/* Chart Header */}
+          <Grid item xs={12}>
+            <Typography sx={{ fontWeight: 'bold' }} variant="h5">Ticket Sales Trend</Typography>
           </Grid>
 
-          {chart_data.map((data, index) => (
+          {/* Chart Section */}
+          {chartData.map((data, index) => (
             <Grid item xs={12} sm={12} md={12} lg={6} key={index}>
               <Typography variant="h6">{data.name}</Typography>
               <StackBars dataset={data.data} />
@@ -81,14 +106,13 @@ export const DashboardList = () => {
           <Grid item xs={12}>
             <Divider sx={{ mb: 2 }} />
             <Grid container spacing={2}>
-              {bestSellerAgents.map((agent, index) => (
+              {agents?.map((agent, index) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                   <Typography variant="body1">{`Rank ${agent.rank}: ${agent.name} - ${agent.sales} Sales`}</Typography>
                 </Grid>
               ))}
             </Grid>
           </Grid>
-
         </Grid>
       )}
     </div>

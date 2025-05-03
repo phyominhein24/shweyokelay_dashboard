@@ -4,7 +4,8 @@ export const baseURL = "https://api.shweyotelayexpress.com/api";
 export const imageURL = "https://api.shweyotelayexpress.com";
 
 export const endpoints = {
-  dashboard: "dashboard",
+  dashboard: "dashboard/payment-stats",
+  topAgent: "dashboard/top-agents",
   login: "auth/login",
   counter: "counter",
   user: "user",

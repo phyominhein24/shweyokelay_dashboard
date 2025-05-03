@@ -270,8 +270,8 @@ export const DailyRouteList = () => {
                                                     const switchCase = ({ column, value }) => {
                                                         switch (column.id) {
                                                             
-                                                            case "start_time":
-                                                                return `${row['created_at'] ? row['created_at'].substring(0, 11) : "No date available"}
+                                                            case "start_date":
+                                                                return `${value}
                                                                 (${row['route']?.departure 
                                                                 ? ((h, m) => `${h % 12 || 12}:${m.toString().padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`)
                                                                   (...row['route']?.departure.split(":").map(Number)) 

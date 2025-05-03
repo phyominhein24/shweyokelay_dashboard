@@ -246,7 +246,7 @@ export const RoutesCreate = () => {
               <Stack spacing={1}>
                 <InputLabel>Distance (required)</InputLabel>
                 <OutlinedInput
-                  type="number"
+                  type="text"
                   onChange={(e) =>
                     payloadHandler(
                       payload,
@@ -258,7 +258,7 @@ export const RoutesCreate = () => {
                     )
                   }
                   name="distance"
-                  placeholder="Enter Routes Distance"
+                  placeholder="620 km"
                 />
                 <ValidationMessage field={"distance"} />
               </Stack>
@@ -280,7 +280,7 @@ export const RoutesCreate = () => {
                     )
                   }
                   name="duration"
-                  placeholder="Enter Routes Duration"
+                  placeholder="7 hours"
                 />
                 <ValidationMessage field={"duration"} />
               </Stack>
