@@ -15,19 +15,18 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { Breadcrumb } from "../../../shares/Breadcrumbs";
 import FormMainAction from "../../../shares/FormMainAction";
+import { Profile } from "../../../shares/Profile";
 import { ProfileImage } from "../../../shares/ProfileImage";
 import { ValidationMessage } from "../../../shares/ValidationMessage";
+import { dailyRoutePayload } from "../dailyRoutePayload";
+import { dailyRouteService } from "../dailyRouteService";
 import { endpoints } from "../../../constants/endpoints";
 import { formBuilder } from "../../../helpers/formBuilder";
 import { getRequest } from "../../../helpers/api";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { paths } from "../../../constants/paths";
 import { payloadHandler } from "../../../helpers/handler";
-import { dailyRoutePayload } from "../dailyRoutePayload";
-import { dailyRouteService } from "../dailyRouteService";
-import { Profile } from "../../../shares/Profile";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-
 
 export const DailyRouteUpdate = () => {
   const [loading, setLoading] = useState(false);
